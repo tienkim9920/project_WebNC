@@ -86,6 +86,13 @@ function Home(props) {
                         <div className="col-lg-4 col-md-4 text-center">
                             <div className="single-banner">
                                 <a href="#">
+                                    <img src={bg7} alt="Li's Static Banner" />
+                                </a>
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 text-center pt-xs-30">
+                            <div className="single-banner">
+                                <a href="#">
                                     <img src={bg5} alt="Li's Static Banner" />
                                 </a>
                             </div>
@@ -97,20 +104,13 @@ function Home(props) {
                                 </a>
                             </div>
                         </div>
-                        <div className="col-lg-4 col-md-4 text-center pt-xs-30">
-                            <div className="single-banner">
-                                <a href="#">
-                                    <img src={bg7} alt="Li's Static Banner" />
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <Home_Product gender={`Chicken`} category={'category_2'} GET_id_modal={GET_id_modal} />
+            <Home_Product gender={`Gà Vui Vẻ`} category={'category_1'} GET_id_modal={GET_id_modal} />
 
-            <Home_Product gender={`Desserts`} category={'category_3'} GET_id_modal={GET_id_modal} />
+            <Home_Product gender={`Gà Sốt Cay`} category={'category_2'} GET_id_modal={GET_id_modal} />
 
             <div className="modal fade modal-wrapper" id={id_modal} >
                 <div className="modal-dialog modal-dialog-centered" role="document">
@@ -158,7 +158,7 @@ function Home(props) {
                                                     <div className="quantity">
                                                         <label>Quantity</label>
                                                         <div className="cart-plus-minus">
-                                                            <input className="cart-plus-minus-box" type="text" />
+                                                            <input className="cart-plus-minus-box" value="1" type="text" />
                                                             <div className="dec qtybutton"><i className="fa fa-angle-down"></i></div>
                                                             <div className="inc qtybutton"><i className="fa fa-angle-up"></i></div>
                                                         </div>

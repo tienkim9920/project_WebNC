@@ -32,9 +32,9 @@ const ReducerCart = (state = initalState, action) => {
             }else{
 
                 //Tìm Vị Trí của sản phẩm đã mua
-                const indexCart = add_cart.findIndex(value => {
-                    return value.id_product === data_add_cart.id_product
-                })                
+                // const indexCart = add_cart.findIndex(value => {
+                //     return value.id_product === data_add_cart.id_product
+                // })                
 
                 //Tìm xem thử sản phẩm này đã mua hay chưa
                 const findCart = add_cart.find(value => {
@@ -49,23 +49,20 @@ const ReducerCart = (state = initalState, action) => {
                     add_cart.push(data_add_cart)
                     console.log("Push")
                 }else{
-                    add_cart[indexCart].count = parseInt(add_cart[indexCart].count) + parseInt(data_add_cart.count)
-                    console.log("Update")
+                    for (let i = 0; i < add_cart.length; i++){
+                        if (add_cart[i].id_product === data_add_cart.id_product){
+                            if (add_cart[i].size === data_add_cart.size){
+                                add_cart[i].count = parseInt(add_cart[i].count) + parseInt(data_add_cart.count)
+                                flag = true
+                                console.log("Update")
+                            }
+                        }
+                    }
 
-                    // for (let i = 0; i < add_cart.length; i++){
-                    //     if (add_cart[i].id_product === data_add_cart.id_product){
-                    //         if (add_cart[i].size === data_add_cart.size){
-                    //             add_cart[i].count = parseInt(add_cart[i].count) + parseInt(data_add_cart.count)
-                    //             flag = true
-                    //             console.log("Update")
-                    //         }
-                    //     }
-                    // }
-
-                    // if (!flag){
-                    //     add_cart.push(data_add_cart)
-                    //     console.log("Push")
-                    // }
+                    if (!flag){
+                        add_cart.push(data_add_cart)
+                        console.log("Push")
+                    }
                 }
             }  
 
@@ -83,10 +80,14 @@ const ReducerCart = (state = initalState, action) => {
             //Lấy dữ diệu có sẵn trong state
             const delete_cart = state.listCart
 
+            console.log(action.data)
+
             //Tìm kiểm vị trí mà cần xóa
             const indexDelete = delete_cart.findIndex(value => {
                 return value.id_cart === action.data
             })
+
+           
 
             //Xóa theo vị trí
             delete_cart.splice(indexDelete, 1)

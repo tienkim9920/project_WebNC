@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Sh8XqSIotgXCy/IGnKpN0ufAm/ZdspdWmwceo02nS+xahl10kM+ZBH9v45HvfafXn4S76/qnmJv8dhN9WWmqdw==",
+  "dgSpecHash": "EHKFvoV+udCi8hddP/1M9c7+b9DzaVFiXVqT5WXZIjykYe29E+TVaA4UqQJTY4EWXou/PRcNaU3H9SjjaZJpfA==",
   "success": true,
-  "projectFilePath": "E:\\ReactJS\\web_nangcao\\server_app\\API\\API\\API.csproj",
+  "projectFilePath": "E:\\ReactJS\\project_WebNC\\server_app\\API\\API\\API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",

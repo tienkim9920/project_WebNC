@@ -24,10 +24,11 @@ function SignIn(props) {
 
     const [redirect, set_redirect] = useState(false)
 
-    // Get count từ redux khi user chưa đăng nhập
-    const count_change = useSelector(state => state.Count.isLoad)
+    // Get carts từ redux khi user chưa đăng nhập
+    const carts = useSelector(state => state.Cart.listCart)
 
-    const list_cart = useSelector(state => state.Cart.listCart)
+    // Get isLoad từ redux để load lại phần header
+    const count_change = useSelector(state => state.Count.isLoad)
 
     const handler_signin = (e) => {
 
@@ -54,28 +55,21 @@ function SignIn(props) {
 
                    console.log(response)
 
-                    const action = addSession(response.id_user)
+                    const action = addSession(response._id)
                     dispatch(action)
 
-                    sessionStorage.setItem('id_user', response.id_user)
+                    sessionStorage.setItem('id_user', response._id)
 
-                    // Sau khi đăng nhập xong thì đẩy hết tất cả sản phẩm từ redux qua API
-                    // theo phương thức POST
-                    const postData = async () => {
+                    for (let i = 0; i < carts.length; i++){
 
-                        for (let i = 0; i < list_cart.length; i++){
+                        carts[i].id_user = sessionStorage.getItem('id_user')
 
-                            list_cart[i].id_user =  sessionStorage.getItem('id_user')
+                        const response = await Cart.Post_Cart(carts[i])
 
-                            const response = await Cart.Post_Cart(list_cart[i])
-                            console.log(response)
+                        console.log(response)
 
-                        }
-        
                     }
-        
-                    postData()
-        
+                    
                     const action_count_change = changeCount(count_change)
                     dispatch(action_count_change)
 

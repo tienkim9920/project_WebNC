@@ -9162,11 +9162,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\ReactJS\\web_nangcao\\server_app\\API\\API\\API.csproj",
+      "projectUniqueName": "E:\\ReactJS\\project_WebNC\\server_app\\API\\API\\API.csproj",
       "projectName": "API",
-      "projectPath": "E:\\ReactJS\\web_nangcao\\server_app\\API\\API\\API.csproj",
+      "projectPath": "E:\\ReactJS\\project_WebNC\\server_app\\API\\API\\API.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "E:\\ReactJS\\web_nangcao\\server_app\\API\\API\\obj\\",
+      "outputPath": "E:\\ReactJS\\project_WebNC\\server_app\\API\\API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Cart from '../API/CartAPI';
 import User from '../API/User';
-import logo from '../Image/1.jpg'
+import logo from '../Image/7.png'
 import { addUser, deleteCart } from '../Redux/Action/ActionCart';
 import { changeCount } from '../Redux/Action/ActionCount';
 import { addSession, deleteSession } from '../Redux/Action/ActionSession';
 import queryString from 'query-string'
+import Product from '../API/Product';
 
 function Header(props) {
 
@@ -187,6 +188,43 @@ function Header(props) {
     }
 
 
+    const [male, set_male] = useState([])
+    const [female, set_female] = useState([])
+
+    // Gọi API theo phương thức GET để load category
+    useEffect(() => {
+
+        const fetchData = async () => {
+
+            // gender = male
+            const params_male = {
+                gender: 'male'
+            }
+
+            const query_male = '?' + queryString.stringify(params_male)
+
+            const response_male = await Product.Get_Category_Gender(query_male)
+
+            set_male(response_male)
+
+            // gender = female
+            const params_female = {
+                gender: 'female'
+            }
+
+            const query_female = '?' + queryString.stringify(params_female)
+
+            const response_female = await Product.Get_Category_Gender(query_female)
+
+            set_female(response_female)
+
+        }
+
+        fetchData()
+
+    }, [])
+
+
     return (
         <header>
             <div className="header-top">
@@ -217,7 +255,7 @@ function Header(props) {
                                     <div className="ul_setting">
                                         { active_user ? (
                                             <ul className="setting_ul collapse" id="collapseExample">
-                                                <li className="li_setting"><Link to="/history">Profile</Link></li>
+                                                <li className="li_setting"><Link to="/profile/123">Profile</Link></li>
                                                 <li className="li_setting"><Link to="/history">History</Link></li>
                                                 <li className="li_setting"><a onClick={handler_logout} href="#">Log Out</a></li>
                                             </ul>
@@ -271,16 +309,16 @@ function Header(props) {
                                             <div className="minicart collapse" id="collapse_carts">
                                                 <ul className="minicart-product-list">
                                                     {
-                                                        carts_mini && carts_mini.map(value => (
-                                                            <li key={value.id_cart}>
+                                                        carts_mini && carts_mini.map((value, index) => (
+                                                            <li key={index}>
                                                                 <Link to={`/detail/${value.id_product}`} className="minicart-product-image">
                                                                     <img src={value.image} alt="cart products" />
                                                                 </Link>
                                                                 <div className="minicart-product-details">
-                                                                    <h6><a href="single-product.html">{value.name_product}</a></h6>
-                                                                    <span>${value.price_product} x {value.count}</span>
+                                                                    <h6><a>{value.name_product}</a></h6>
+                                                                    <span>${value.price_product} x {value.count}, {value.size}</span>
                                                                 </div>
-                                                                <a className="close" onClick={() => handler_delete_mini(value.id_cart)}>
+                                                                <a className="close" onClick={() => handler_delete_mini(value._id)}>
                                                                     <i className="fa fa-close"></i>
                                                                 </a>
                                                             </li>
@@ -291,9 +329,6 @@ function Header(props) {
                                                 <div className="minicart-button">
                                                     <Link to="/cart" className="li-button li-button-fullwidth li-button-dark">
                                                         <span>View Full Cart</span>
-                                                    </Link>
-                                                    <Link to={sessionStorage.getItem('id_user') ? '/checkout' : '/signin'} className="li-button li-button-fullwidth li-button-dark">
-                                                        <span>Checkout</span>
                                                     </Link>
                                                 </div>
                                             </div>
@@ -313,16 +348,28 @@ function Header(props) {
                                         <ul>
 
                                             <li className="dropdown-holder"><Link to="/">Home</Link></li>
-                                            <li className="megamenu-holder"><Link to="/shop">Menu</Link>
-                                                <ul className="megamenu hb-megamenu">
-                                                    <li><a href="shop-left-sidebar.html">Breakfast</a>
+                                            <li className="megamenu-holder"><Link to="/shop/all">Menu</Link>
+                                                <ul class="megamenu hb-megamenu">
+                                                    <li><Link to="/shop/all">Male</Link>
                                                         <ul>
-                                                            <li><a href="shop-3-column.html">GÀ GIÒN VUI VẺ</a></li>
-                                                            <li><a href="shop-4-column.html">GÀ SỐT CAY</a></li>
-                                                            <li><a href="shop-left-sidebar.html">MÌ Ý SỐT BÒ BẰM</a></li>
-                                                            <li><a href="shop-right-sidebar.html">BURGER & CƠM</a></li>
-                                                            <li><a href="shop-right-sidebar.html">PHẦN ĂN PHỤ</a></li>
-                                                            <li><a href="shop-right-sidebar.html">MÓN TRÁNG MIỆNG</a></li>
+                                                            {
+                                                                male && male.map(value => (
+                                                                    <li key={value._id}>
+                                                                        <Link to={`/shop/${value._id}`} style={{ cursor: 'pointer' }}>{value.category}</Link>
+                                                                    </li>
+                                                                ))
+                                                            }
+                                                        </ul>
+                                                    </li>
+                                                    <li><Link to="/shop">Female</Link>
+                                                        <ul>
+                                                            {
+                                                                female && female.map(value => (
+                                                                    <li key={value._id}>
+                                                                        <Link to={`/shop/${value._id}`} style={{ cursor: 'pointer' }}>{value.category}</Link>
+                                                                    </li>
+                                                                ))
+                                                            }
                                                         </ul>
                                                     </li>
                                                 </ul>

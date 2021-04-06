@@ -173,14 +173,18 @@ function Cart(props) {
 
 
     // Hàm này này dùng để kiểm tra đăng nhập checkout
-    const [redirect, set_redirect] = useState(false)
-
     const [show_error, set_show_error] = useState(false)
+
+    const [show_null_cart, set_show_null_cart] = useState(false)
 
     const handler_checkout = () => {
 
         if (sessionStorage.getItem('id_user')){
-            set_redirect(true)
+            if (list_carts.length < 1){
+                set_show_null_cart(true)
+            }else{
+                window.location.replace('/checkout')
+            }
         }else{
 
             set_show_error(true)
@@ -189,6 +193,7 @@ function Cart(props) {
 
         setTimeout(() => {
             set_show_error(false)
+            set_show_null_cart(false)
         }, 1500)
 
     }
@@ -203,6 +208,17 @@ function Cart(props) {
                                 <i className="fa fa-bell fix_icon_bell" style={{ fontSize: '40px', color: '#fff', backgroundColor: '#f84545' }}></i>
                             </div>
                             <h4 className="text-center p-3" style={{ color: '#fff' }}>Vui Lòng Kiểm Tra Tình Trạng Đăng Nhập!</h4>
+                        </div>
+                    </div>
+            }
+            {
+                show_null_cart && 
+                    <div className="modal_success">
+                        <div className="group_model_success pt-3">
+                            <div className="text-center p-2">
+                                <i className="fa fa-bell fix_icon_bell" style={{ fontSize: '40px', color: '#fff', backgroundColor: '#f84545' }}></i>
+                            </div>
+                            <h4 className="text-center p-3" style={{ color: '#fff' }}>Vui Lòng Kiểm Tra Lại Giỏ Hàng!</h4>
                         </div>
                     </div>
             }
@@ -231,24 +247,28 @@ function Cart(props) {
                                                 <th className="li-product-thumbnail">images</th>
                                                 <th className="cart-product-name">Product</th>
                                                 <th className="li-product-price">Price</th>
+                                                <th className="li-product-price">Size</th>
                                                 <th className="li-product-quantity">Quantity</th>
                                                 <th className="li-product-subtotal">Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {
-                                                list_carts && list_carts.map(value => (
-                                                <tr key={value.id_cart}>
-                                                    <td className="li-product-remove" style={{ cursor: 'pointer' }} onClick={() => handler_delete_carts(value.id_cart)}><a><i className="fa fa-times"></i></a></td>
+                                                list_carts && list_carts.map((value, index) => (
+                                                <tr key={index}>
+                                                    <td className="li-product-remove" onClick={sessionStorage.getItem('id_user') ? () => handler_delete_carts(value._id) : () => handler_delete_carts(value.id_cart)}>
+                                                        <a style={{ cursor: 'pointer' }}><i className="fa fa-times"></i></a>
+                                                    </td>
                                                     <td className="li-product-thumbnail"><Link to={`/detail/${value.id_product}`}><img src={value.image} style={{ width: '5rem'}} alt="Li's Product Image" /></Link></td>
                                                     <td className="li-product-name"><a href="#">{value.name_product}</a></td>
                                                     <td className="li-product-price"><span className="amount">${value.price_product}</span></td>
+                                                    <td className="li-product-price"><span className="amount">{value.size}</span></td>
                                                     <td className="quantity">
                                                         <label>Quantity</label>
                                                         <div className="cart-plus-minus">
                                                             <input className="cart-plus-minus-box" value={value.count} type="text" />
-                                                            <div className="dec qtybutton" onClick={() => downCount(value.count, value.id_cart)}><i className="fa fa-angle-down"></i></div>
-                                                            <div className="inc qtybutton" onClick={() => upCount(value.count, value.id_cart)}><i className="fa fa-angle-up"></i></div>
+                                                            <div className="dec qtybutton" onClick={() => downCount(value.count, value._id)}><i className="fa fa-angle-down"></i></div>
+                                                            <div className="inc qtybutton" onClick={() => upCount(value.count, value._id)}><i className="fa fa-angle-up"></i></div>
                                                         </div>
                                                     </td>
                                                     <td className="product-subtotal"><span className="amount">${parseInt(value.price_product) * parseInt(value.count)}</span></td>
@@ -276,9 +296,6 @@ function Cart(props) {
                                                 <li>Subtotal <span>${total_price}</span></li>
                                                 <li>Total <span>${total_price}</span></li>
                                             </ul>
-                                            {
-                                                redirect && <Redirect to="/checkout" />
-                                            }
                                             <a style={{ color: '#fff', cursor: 'pointer', fontWeight: '600' }} onClick={handler_checkout}>Proceed to checkout</a>
                                         </div>
                                     </div>

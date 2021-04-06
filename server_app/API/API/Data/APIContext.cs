@@ -17,6 +17,7 @@ namespace API.Data
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
