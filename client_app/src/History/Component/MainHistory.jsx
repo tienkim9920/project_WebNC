@@ -62,22 +62,29 @@ function MainHistory(props) {
                                                 <th className="li-product-price">Address</th>
                                                 <th className="li-product-price">Email</th>
                                                 <th className="li-product-quantity">Total</th>
+                                                <th className="li-product-subtotal">Payment</th>
                                                 <th className="li-product-subtotal">Status</th>
-                                                <th className="li-product-subtotal">Delivery</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {
                                                 history && history.map(value => (
                                                     <tr>
-                                                        <td className="li-product-price"><span className="amount"><Link to={`/history/${value._id}`}>View</Link></span></td>
+                                                        <td className="li-product-price"><span className="amount"><Link to={`/history/${value.id_history}`}>View</Link></span></td>
                                                         <td className="li-product-price"><span className="amount">{value.fullname}</span></td>
                                                         <td className="li-product-price"><span className="amount">{value.phone}</span></td>
                                                         <td className="li-product-price"><span className="amount">{value.address}</span></td>
                                                         <td className="li-product-price"><span className="amount">{value.email}</span></td>
                                                         <td className="li-product-price"><span className="amount">{value.total}</span></td>
-                                                        <td className="li-product-price"><span className="amount" style={value.status ? { color: 'green'} : { color: 'red'}}>{value.status ? 'Đã Thanh Toán' : 'Chưa Thanh Toán'}</span></td>
-                                                        <td className="li-product-price"><span className="amount">{value.delivery ? 'Đã Giao Hàng' : 'Đang Xử Lý'}</span></td>
+                                                        <td className="li-product-price"><span className="amount" style={value.status ? { color: 'green'} : { color: 'red'}}>{value.status ? 'Paid' : 'Unpaid'}</span></td>
+                                                        <td className="li-product-price"><span className="amount">
+                                                            {
+                                                            value.delivery === 0 ? 'X' : 
+                                                            (value.delivery === 1 ? 'Confirmed' : 
+                                                            (value.delivery === 2 ? 'Shipping' : 
+                                                            (value.delivery === 3 ? 'Finished' : 'Undifine'))) }
+                                                            </span>
+                                                        </td>
                                                     </tr>
                                                 ))
                                             }

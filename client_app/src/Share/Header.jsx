@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import Cart from '../API/CartAPI';
@@ -8,6 +8,7 @@ import { addUser, deleteCart } from '../Redux/Action/ActionCart';
 import { changeCount } from '../Redux/Action/ActionCount';
 import { addSession, deleteSession } from '../Redux/Action/ActionSession';
 import queryString from 'query-string'
+import CategoryAPI from '../API/CategoryAPI';
 import Product from '../API/Product';
 
 function Header(props) {
@@ -187,42 +188,68 @@ function Header(props) {
 
     }
 
-
-    const [male, set_male] = useState([])
-    const [female, set_female] = useState([])
-
-    // Gọi API theo phương thức GET để load category
+    const [category, set_category] = useState([])
+    
     useEffect(() => {
 
         const fetchData = async () => {
 
-            // gender = male
-            const params_male = {
-                gender: 'male'
-            }
+            const response = await CategoryAPI.get_all_category()
 
-            const query_male = '?' + queryString.stringify(params_male)
-
-            const response_male = await Product.Get_Category_Gender(query_male)
-
-            set_male(response_male)
-
-            // gender = female
-            const params_female = {
-                gender: 'female'
-            }
-
-            const query_female = '?' + queryString.stringify(params_female)
-
-            const response_female = await Product.Get_Category_Gender(query_female)
-
-            set_female(response_female)
+            set_category(response)
 
         }
 
         fetchData()
 
     }, [])
+
+
+
+    // state keyword search
+    const [keyword_search, set_keyword_search] = useState('')
+
+    const [products, set_products] = useState([])
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+
+            const response = await Product.Get_All_Product()
+
+            console.log(response)
+
+            set_products(response)
+
+        }
+
+        fetchData()
+
+    }, [])
+
+    // Hàm này trả ra list product mà khách hàng tìm kiếm
+    // sử dụng useMemo để performance hơn vì nếu mà dữ liệu mới giống với dữ liệu cũ thì nó sẽ lấy cái
+    // Không cần gọi API để tạo mới data
+    const search_header = useMemo(() => {
+
+        const new_data = products.filter(value => {
+            return value.name_product.toUpperCase().indexOf(keyword_search.toUpperCase()) !== -1
+        })
+
+        return new_data
+
+    }, [keyword_search])
+
+    const handler_search = (e) => {
+
+        e.preventDefault()
+
+        // set cho nó cái session
+        sessionStorage.setItem('search', keyword_search)
+
+        window.location.replace('/search')
+
+    }
 
 
     return (
@@ -256,7 +283,7 @@ function Header(props) {
                                         { active_user ? (
                                             <ul className="setting_ul collapse" id="collapseExample">
                                                 <li className="li_setting"><Link to="/profile/123">Profile</Link></li>
-                                                <li className="li_setting"><Link to="/history">History</Link></li>
+                                                <li className="li_setting"><Link to="/history">Order Status</Link></li>
                                                 <li className="li_setting"><a onClick={handler_logout} href="#">Log Out</a></li>
                                             </ul>
                                         ) : (
@@ -283,9 +310,27 @@ function Header(props) {
                             </div>
                         </div>
                         <div className="col-lg-9 pl-0 ml-sm-15 ml-xs-15 d-flex justify-content-between">
-                            <form action="#" className="hm-searchbox">
-                                <input type="text" placeholder="Enter your search key ..." />
+                            <form action="/search" className="hm-searchbox" onSubmit={handler_search}>
+                                <input type="text" placeholder="Enter your search key ..." onChange={(e) => set_keyword_search(e.target.value)}/>
                                 <button className="li-btn" type="submit"><i className="fa fa-search"></i></button>
+                                {
+                                    keyword_search && <div className="show_search_product">
+                                    {
+                                        search_header && search_header.map(value => (
+                                            <Link to={`/detail/${value.id_product}`} className="hover_box_search d-flex" key={value.id_product}>
+                                                <div style={{ padding: '.8rem'}}>
+                                                    <img className="img_list_search" src={value.image} alt="" />
+                                                </div>
+
+                                                <div className="group_title_search" style={{ marginTop: '2.7rem'}}>
+                                                    <h6 className="title_product_search">{value.name_product}</h6>
+                                                    <span className="price_product_search">{value.price_product}$</span>
+                                                </div>
+                                            </Link>
+                                        ))
+                                    }
+                                    </div>
+                                }
                             </form>
                             <div className="header-middle-right">
                                 <ul className="hm-menu">
@@ -316,9 +361,9 @@ function Header(props) {
                                                                 </Link>
                                                                 <div className="minicart-product-details">
                                                                     <h6><a>{value.name_product}</a></h6>
-                                                                    <span>${value.price_product} x {value.count}, {value.size}</span>
+                                                                    <span>${value.price_product} x {value.count}</span>
                                                                 </div>
-                                                                <a className="close" onClick={() => handler_delete_mini(value._id)}>
+                                                                <a className="close" onClick={() => handler_delete_mini(value.id_cart)}>
                                                                     <i className="fa fa-close"></i>
                                                                 </a>
                                                             </li>
@@ -348,25 +393,14 @@ function Header(props) {
                                         <ul>
 
                                             <li className="dropdown-holder"><Link to="/">Home</Link></li>
-                                            <li className="megamenu-holder"><Link to="/shop/all">Menu</Link>
+                                            <li className="megamenu-holder"><Link to="/shop/all">Shop</Link>
                                                 <ul class="megamenu hb-megamenu">
-                                                    <li><Link to="/shop/all">Male</Link>
+                                                    <li><Link to="/shop/all">Menu</Link>
                                                         <ul>
                                                             {
-                                                                male && male.map(value => (
-                                                                    <li key={value._id}>
-                                                                        <Link to={`/shop/${value._id}`} style={{ cursor: 'pointer' }}>{value.category}</Link>
-                                                                    </li>
-                                                                ))
-                                                            }
-                                                        </ul>
-                                                    </li>
-                                                    <li><Link to="/shop">Female</Link>
-                                                        <ul>
-                                                            {
-                                                                female && female.map(value => (
-                                                                    <li key={value._id}>
-                                                                        <Link to={`/shop/${value._id}`} style={{ cursor: 'pointer' }}>{value.category}</Link>
+                                                                category && category.map(value => (
+                                                                    <li key={value.id_category}>
+                                                                        <Link to={`/shop/${value.id_category}`} style={{ cursor: 'pointer' }}>{value.name}</Link>
                                                                     </li>
                                                                 ))
                                                             }

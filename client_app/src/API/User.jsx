@@ -13,7 +13,7 @@ const User = {
     },
 
     Get_Detail_User: (query) => {
-        const url = `/api/User/detail/login${query}`
+        const url = `/api/User/detail${query}`
         return axiosClient.get(url)
     },
 

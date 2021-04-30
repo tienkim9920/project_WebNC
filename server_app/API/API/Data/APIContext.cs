@@ -18,6 +18,9 @@ namespace API.Data
         public DbSet<Product> Product { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<History> History { get; set; }
+        public DbSet<Delivery> Delivery { get; set; }
+        public DbSet<DetailHistory> DetailHistory { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

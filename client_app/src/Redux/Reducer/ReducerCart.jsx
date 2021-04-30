@@ -32,16 +32,14 @@ const ReducerCart = (state = initalState, action) => {
             }else{
 
                 //Tìm Vị Trí của sản phẩm đã mua
-                // const indexCart = add_cart.findIndex(value => {
-                //     return value.id_product === data_add_cart.id_product
-                // })                
+                const indexCart = add_cart.findIndex(value => {
+                    return value.id_product === data_add_cart.id_product
+                })                
 
                 //Tìm xem thử sản phẩm này đã mua hay chưa
                 const findCart = add_cart.find(value => {
                     return value.id_product === data_add_cart.id_product
                 })
-
-                let flag = false
 
                 //Nếu này chưa được mua thì mình push vào
                 //Còn đã từng mua rồi thì mình update tại vị trí indexCart mà mình vừa tìm được
@@ -49,20 +47,8 @@ const ReducerCart = (state = initalState, action) => {
                     add_cart.push(data_add_cart)
                     console.log("Push")
                 }else{
-                    for (let i = 0; i < add_cart.length; i++){
-                        if (add_cart[i].id_product === data_add_cart.id_product){
-                            if (add_cart[i].size === data_add_cart.size){
-                                add_cart[i].count = parseInt(add_cart[i].count) + parseInt(data_add_cart.count)
-                                flag = true
-                                console.log("Update")
-                            }
-                        }
-                    }
-
-                    if (!flag){
-                        add_cart.push(data_add_cart)
-                        console.log("Push")
-                    }
+                    add_cart[indexCart].count = parseInt(add_cart[indexCart].count) + data_add_cart.count
+                    console.log("Update")
                 }
             }  
 

@@ -9,6 +9,8 @@ import { changeCount } from '../Redux/Action/ActionCount';
 import { Link } from 'react-router-dom';
 import Cart from '../API/CartAPI';
 import CommentAPI from '../API/CommentAPI';
+import User from '../API/User';
+import queryString from 'query-string'
 
 Detail_Product.propTypes = {
 
@@ -48,8 +50,6 @@ function Detail_Product(props) {
 
     const [show_success, set_show_success] = useState(false)
 
-    const [size, set_size] = useState('S')
-
     // Hàm này dùng để thêm vào giỏ hàng
     const handler_addcart = (e) => {
 
@@ -62,7 +62,6 @@ function Detail_Product(props) {
             price_product: product.price_product,
             count: count,
             image: product.image,
-            size: size,
             id_cart: Math.random().toString()
         }
 
@@ -146,23 +145,27 @@ function Detail_Product(props) {
                 return
             }
 
-            const data = {
-                id_user: sessionStorage.getItem('id_user'),
-                content: comment,
-                star: star
-            }
+            const post_Data = async () => {
 
-            const post_data = async () => {
+                const params = {
+                    id_comment: Math.random().toString(),
+                    id_product: id,
+                    id_user: sessionStorage.getItem('id_user'),
+                    comment: comment,
+                    star: star
+                }
 
-                const response = await CommentAPI.post_comment(data, id)
+                const query = '?' + queryString.stringify(params)
+
+                const response = await CommentAPI.post_comment(query)
 
                 console.log(response)
 
+                set_load_comment(true)
+
             }
 
-            post_data()
-
-            set_load_comment(true)
+            post_Data()
 
             set_comment('')
 
@@ -261,16 +264,6 @@ function Detail_Product(props) {
                                             </span>
                                         </p>
                                     </div>
-                                    <div className="product-variants">
-                                        <div className="produt-variants-size">
-                                            <label>Size</label>
-                                            <select className="nice-select" onChange={(e) => set_size(e.target.value)}>
-                                                <option value="S">S</option>
-                                                <option value="M">M</option>
-                                                <option value="L">L</option>
-                                            </select>
-                                        </div>
-                                    </div>
                                     <div className="single-add-to-cart">
                                         <form action="#" className="cart-quantity">
                                             <div className="quantity">
@@ -316,8 +309,8 @@ function Detail_Product(props) {
                                         {
                                             list_comment && list_comment.map(value => (
 
-                                                <div className="comment-author-infos pt-25">
-                                                    <span>{value.fullname} <div style={{ fontWeight: '400' }}>{value.content}</div></span>
+                                                <div className="comment-author-infos pt-25" key={value.id_comment}>
+                                                    <span>{value.fullname} <div style={{ fontWeight: '400' }}>{value.comment}</div></span>
                                                     <ul className="rating">
                                                         <li><i className={value.star1}></i></li>
                                                         <li><i className={value.star2}></i></li>

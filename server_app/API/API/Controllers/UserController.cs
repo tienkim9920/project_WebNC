@@ -42,7 +42,7 @@ namespace API.Controllers
         }
 
 
-        // GET api/User?username&password
+        // GET api/User/detail?username&password
         [HttpGet]
         [Route("detail")]
         public async Task<ActionResult<User>> GetDetailUser()

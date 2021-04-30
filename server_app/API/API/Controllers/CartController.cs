@@ -65,7 +65,7 @@ namespace API.Controllers
             return Ok("Thanh Cong!");
         }
 
-        // PUT: api/Cart?id_user&count
+        // PUT: api/Cart?id_cart&count
         [HttpPut]
         public ActionResult<Cart> PutCart()
         {

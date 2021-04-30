@@ -247,7 +247,6 @@ function Cart(props) {
                                                 <th className="li-product-thumbnail">images</th>
                                                 <th className="cart-product-name">Product</th>
                                                 <th className="li-product-price">Price</th>
-                                                <th className="li-product-price">Size</th>
                                                 <th className="li-product-quantity">Quantity</th>
                                                 <th className="li-product-subtotal">Total</th>
                                             </tr>
@@ -256,19 +255,18 @@ function Cart(props) {
                                             {
                                                 list_carts && list_carts.map((value, index) => (
                                                 <tr key={index}>
-                                                    <td className="li-product-remove" onClick={sessionStorage.getItem('id_user') ? () => handler_delete_carts(value._id) : () => handler_delete_carts(value.id_cart)}>
+                                                    <td className="li-product-remove" onClick={sessionStorage.getItem('id_user') ? () => handler_delete_carts(value.id_cart) : () => handler_delete_carts(value.id_cart)}>
                                                         <a style={{ cursor: 'pointer' }}><i className="fa fa-times"></i></a>
                                                     </td>
                                                     <td className="li-product-thumbnail"><Link to={`/detail/${value.id_product}`}><img src={value.image} style={{ width: '5rem'}} alt="Li's Product Image" /></Link></td>
                                                     <td className="li-product-name"><a href="#">{value.name_product}</a></td>
                                                     <td className="li-product-price"><span className="amount">${value.price_product}</span></td>
-                                                    <td className="li-product-price"><span className="amount">{value.size}</span></td>
                                                     <td className="quantity">
                                                         <label>Quantity</label>
                                                         <div className="cart-plus-minus">
                                                             <input className="cart-plus-minus-box" value={value.count} type="text" />
-                                                            <div className="dec qtybutton" onClick={() => downCount(value.count, value._id)}><i className="fa fa-angle-down"></i></div>
-                                                            <div className="inc qtybutton" onClick={() => upCount(value.count, value._id)}><i className="fa fa-angle-up"></i></div>
+                                                            <div className="dec qtybutton" onClick={() => downCount(value.count, value.id_cart)}><i className="fa fa-angle-down"></i></div>
+                                                            <div className="inc qtybutton" onClick={() => upCount(value.count, value.id_cart)}><i className="fa fa-angle-up"></i></div>
                                                         </div>
                                                     </td>
                                                     <td className="product-subtotal"><span className="amount">${parseInt(value.price_product) * parseInt(value.count)}</span></td>

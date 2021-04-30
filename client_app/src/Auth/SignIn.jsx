@@ -55,10 +55,10 @@ function SignIn(props) {
 
                    console.log(response)
 
-                    const action = addSession(response._id)
+                    const action = addSession(response.id_user)
                     dispatch(action)
 
-                    sessionStorage.setItem('id_user', response._id)
+                    sessionStorage.setItem('id_user', response.id_user)
 
                     for (let i = 0; i < carts.length; i++){
 

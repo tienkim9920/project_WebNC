@@ -7,9 +7,19 @@ const OrderAPI = {
     //     return axiosClient.post(url, data)
     // },
 
-    post_order: (data) => {
-        const url = `/api/Payment/order`
+    post_history: (data) => {
+        const url = `/api/History`
         return axiosClient.post(url, data)
+    },
+
+    post_delivery: (data) => {
+        const url = `/api/Delivery`
+        return axiosClient.post(url, data)
+    },
+
+    post_sendmail: (query) => {
+        const url = `/api/History/sendmail${query}`
+        return axiosClient.post(url)
     }
 
 }

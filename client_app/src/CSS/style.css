@@ -2101,15 +2101,15 @@ textarea:focus {
 		color: #242424;
 }
 .single-product-wrap {
-  background: #ffffff none repeat scroll 0 0;
+  /* background: #ffffff none repeat scroll 0 0;
   position: relative;
-  -webkit-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out; */
   transition: all 300ms ease-in 0s;
 }
 .single-product-wrap:hover {
   margin: 0 0 -75px;
   padding: 0 0 75px;
-  z-index: 9;
+  z-index: 999;
 }
 .single-product-wrap.mt-40:hover {
   margin: 40px 0 -85px;
@@ -2323,7 +2323,7 @@ textarea:focus {
 	transition: all 0.3s ease-in-out;
 	height: 35px;
 	line-height: 35px;
-	width: 35px;
+	width: 130px;
 }
 .add-actions-link li:hover {
 	background: #fed700;
@@ -5514,6 +5514,38 @@ span.required {
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.img_list_search{
+	width: 100px;
+	height: 100px;
+}
+
+.show_search_product{
+	position: absolute;
+	top: 3rem;
+	background-color: #fff;
+	width: 100%;
+	height: 400px;
+	z-index: 9999;
+	box-shadow: 2px 2px 2px #dadada,-2px -2px 2px #dadada;
+	overflow: auto;
+}
+
+.title_product_search{
+	color: #0363cd;
+}
+
+.price_product_search{
+	color: #e80f0f;
+}
+
+.hover_box_search{
+	cursor: pointer;
+}
+
+.hover_box_search:hover{
+	background-color: #f1f1f1;
 }
 
 @media only screen and (max-width: 479px) {

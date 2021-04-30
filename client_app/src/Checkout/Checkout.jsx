@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import { Redirect } from 'react-router-dom';
 import { changeCount } from '../Redux/Action/ActionCount';
 import { useDispatch, useSelector } from 'react-redux';
+import HistoryAPI from '../API/HistoryAPI';
+import Cart from '../API/CartAPI';
 
 Checkout.propTypes = {
 
@@ -71,15 +73,15 @@ function Checkout(props) {
         fullname: '',
         phone: '',
         address: '',
-        email: ''
     })
+
+    const [email, set_email] = useState('')
 
     const onChangeFullname = (e) => {
         set_information({
             fullname: e.target.value,
             phone: information.phone,
             address: information.address,
-            email: information.email
         })
     }
     const onChangePhone = (e) => {
@@ -87,7 +89,6 @@ function Checkout(props) {
             fullname: information.fullname,
             phone: e.target.value,
             address: information.address,
-            email: information.email
         })
     }
 
@@ -96,15 +97,6 @@ function Checkout(props) {
             fullname: information.fullname,
             phone: information.phone,
             address: e.target.value,
-            email: information.email
-        })
-    }
-    const onChangeEmail = (e) => {
-        set_information({
-            fullname: information.fullname,
-            phone: information.phone,
-            address: information.address,
-            email: e.target.value
         })
     }
 
@@ -115,6 +107,13 @@ function Checkout(props) {
 
     }, [information])
 
+    useEffect(() => {
+
+        checkValidation()
+        console.log(email)
+
+    }, [email])
+
     // Kiểm tra Paypal
     function checkValidation() {
         if (information.fullname === '') {
@@ -123,7 +122,7 @@ function Checkout(props) {
             if (information.phone === '') {
                 set_show_error(true)
             } else {
-                if (information.email === '') {
+                if (email === '') {
                     set_show_error(true)
                 } else {
                     set_show_error(false)
@@ -149,20 +148,31 @@ function Checkout(props) {
 
         set_load_order(true)
 
-        const body = {
+        const id_find = Math.random().toString()
+        const id_history = Math.random().toString()
+        const id_delivery = Math.random().toString()
+
+        const body_history = {
+            //History
+            id_history: id_history,
             id_user: sessionStorage.getItem('id_user'),
-            id_find: Math.random().toString(),
-            fullname: data.fullname,
-            phone: data.phone,
+            id_find: id_find,
+            fullname: information.fullname,
+            phone: information.phone,
             address: information.address,
-            email: data.email,
-            total: total_price,
+            email: email,
+            total: total_price.toString(),
             status: false,
-            delivery: false,
-            id_payment: '60635313a1ba573dc01656b6',
+            delivery: 0,
+            id_payment: '60635313a1ba573dc01656b6', // Trực Tiếp
+        }
+
+        const body_delivery = {
             //Delivery
-            from: from,
-            to: information.address,
+            id_delivery: id_delivery,
+            id_history: id_history,
+            address_from: from,
+            address_to: information.address,
             distance: distance,
             duration: duration,
             price: price
@@ -170,13 +180,49 @@ function Checkout(props) {
 
         const post_data = async () => {
 
-            const response = await OrderAPI.post_order(body)
+            // Gọi API post history
+            const response = await OrderAPI.post_history(body_history)
+
+            // Gọi API post delivery
+            const response_delivery = await OrderAPI.post_delivery(body_delivery)
+
+            // Gọi API Sendmail và post Detail_History và xóa data trong Cart
+            const params = {
+                id_find: id_find
+            }
+
+            const query = '?' + queryString.stringify(params)
+
+            const response_sendmail = await OrderAPI.post_sendmail(query)
 
             console.log(response)
+            console.log(response_delivery)
+            console.log(response_sendmail)
+
+            // Phần này là xử lý POST vào detail_history
+            for (let i = 0; i < carts.length; i++){
+
+                const data = {
+                    id_detail_history: "CT" + Math.random().toString(),
+                    id_history: id_history,
+                    name_product: carts[i].name_product,
+                    price_product: carts[i].price_product,
+                    count: parseInt(carts[i].count),
+                    image: carts[i].image
+                }
+
+                console.log(data)
+
+                // Gọi API post data thêm data vào Detail_History
+                const response_detail_history = await HistoryAPI.post_detail_history(data)
+
+                const resonse_delete_carts = await Cart.Delete_Cart(carts[i].id_cart)
+
+            }
 
             set_redirect(true)
 
-            // Hàm này dùng để load lại phần header bằng Redux
+            // // Hàm này dùng để load lại phần header bằng Redux
             const action_count_change = changeCount(count_change)
             dispatch(action_count_change)
 
@@ -397,8 +443,8 @@ function Checkout(props) {
                                                     <label>Email <span className="required">*</span></label>
                                                     <input placeholder="Enter Email" type="email" name="email"
                                                         ref={register({ required: true })}
-                                                        value={information.email}
-                                                        onChange={onChangeEmail} />
+                                                        value={email}
+                                                        onChange={(e) => set_email(e.target.value)} />
                                                     {errors.email && errors.email.type === "required" && <span style={{ color: 'red' }}>* Email is required</span>}
                                                 </div>
                                             </div>
@@ -428,7 +474,7 @@ function Checkout(props) {
                                             <tbody>
                                                 {
                                                     carts && carts.map(value => (
-                                                        <tr className="cart_item" key={value._id}>
+                                                        <tr className="cart_item" key={value.id_cart}>
                                                             <td className="cart-product-name">{value.name_product}<strong className="product-quantity"> × {value.count}</strong></td>
                                                             <td className="cart-product-total"><span className="amount">${parseInt(value.price_product) * parseInt(value.count)}</span></td>
                                                         </tr>
@@ -461,7 +507,7 @@ function Checkout(props) {
                                                     <div id="collapseThree" className="collapse">
                                                         <div className="card-body">
                                                             {
-                                                                show_error ? 'Vui Lòng Kiểm Tra Lại Thông Tin' :
+                                                                show_error ? 'Please Checking Information!' :
                                                                     <Paypal 
                                                                         information={information} 
                                                                         total={total_price} 
@@ -470,6 +516,8 @@ function Checkout(props) {
                                                                         distance={distance}
                                                                         duration={duration}
                                                                         price={price}
+                                                                        carts={carts}
+                                                                        email={email}
                                                                     />
                                                             }
                                                         </div>

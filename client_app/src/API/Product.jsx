@@ -3,7 +3,7 @@ import axiosClient from './axiosClient'
 const Product = {
 
     Get_All_Product: () => {
-        const url = '/api/Product'
+        const url = '/api/Product/all'
         return axiosClient.get(url)
     },
 
@@ -23,9 +23,14 @@ const Product = {
     },
 
     Get_Pagination: (query) => {
-        const url = `/api/Product/category/pagination${query}`
+        const url = `/api/Product/pagination${query}`
         return axiosClient.get(url)
     },
+
+    get_search_list: (query) => {
+        const url = `/api/Product/scroll${query}`
+        return axiosClient.get(url)
+    }
 
 }
 

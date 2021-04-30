@@ -6,12 +6,11 @@ import { Link, useParams } from 'react-router-dom';
 import Products from './Component/Products';
 import Pagination from './Component/Pagination';
 import Search from './Component/Search';
+import CategoryAPI from '../API/CategoryAPI';
 
-Shop.propTypes = {
-
-};
 
 function Shop(props) {
+
 
     const { id } = useParams()
 
@@ -110,35 +109,16 @@ function Shop(props) {
     }, [pagination])
 
 
-    const [male, set_male] = useState([])
-    const [female, set_female] = useState([])
+    // Hàm này dùng để gọi API phân loại sản phẩm
+    const [category, set_category] = useState([])
 
-    // Gọi API theo phương thức GET để load category
     useEffect(() => {
 
         const fetchData = async () => {
 
-            // gender = male
-            const params_male = {
-                gender: 'male'
-            }
+            const response = await CategoryAPI.get_all_category()
 
-            const query_male = '?' + queryString.stringify(params_male)
-
-            const response_male = await Product.Get_Category_Gender(query_male)
-
-            set_male(response_male)
-
-            // gender = female
-            const params_female = {
-                gender: 'female'
-            }
-
-            const query_female = '?' + queryString.stringify(params_female)
-
-            const response_female = await Product.Get_Category_Gender(query_female)
-
-            set_female(response_female)
+            set_category(response)
 
         }
 
@@ -149,7 +129,7 @@ function Shop(props) {
 
     const handler_Search = (value) => {
         console.log("Search: ", value)
-        
+
         setPagination({
             page: pagination.page,
             count: pagination.count,
@@ -159,6 +139,35 @@ function Shop(props) {
 
     }
 
+
+    // state dùng để thay đổi và hiển thị modal
+    const [id_modal, set_id_modal] = useState('')
+
+    const [product_detail, set_product_detail] = useState([])
+
+    const GET_id_modal = (value) => {
+
+        set_id_modal(value)
+
+    }
+
+    useEffect(() => {
+
+        if (id_modal !== ''){
+
+            const fetchData = async () => {
+
+                const response = await Product.Get_Detail_Product(id_modal)
+
+                set_product_detail(response)
+
+            }
+
+            fetchData()
+
+        }
+
+    }, [id_modal])
 
 
     return (
@@ -174,6 +183,70 @@ function Shop(props) {
                 </div>
             </div>
 
+            <div className="modal fade modal-wrapper" id={id_modal} >
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                    <div className="modal-content">
+                        <div className="modal-body">
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div className="modal-inner-area row">
+                                <div className="col-lg-5 col-md-6 col-sm-6">
+                                    <div className="product-details-left">
+                                        <div className="product-details-images slider-navigation-1">
+                                            <div className="lg-image">
+                                                <img src={product_detail.image} alt="product image" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-7 col-md-6 col-sm-6">
+                                    <div className="product-details-view-content pt-60">
+                                        <div className="product-info">
+                                            <h2>{product_detail.name_product}</h2>
+                                            <div className="rating-box pt-20">
+                                                <ul className="rating rating-with-review-item">
+                                                    <li><i className="fa fa-star-o"></i></li>
+                                                    <li><i className="fa fa-star-o"></i></li>
+                                                    <li><i className="fa fa-star-o"></i></li>
+                                                    <li className="no-star"><i className="fa fa-star-o"></i></li>
+                                                    <li className="no-star"><i className="fa fa-star-o"></i></li>
+                                                </ul>
+                                            </div>
+                                            <div className="price-box pt-20">
+                                                <span className="new-price new-price-2">${product_detail.price_product}</span>
+                                            </div>
+                                            <div className="product-desc">
+                                                <p>
+                                                    <span>
+                                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis reiciendis hic voluptatibus aperiam culpa ullam dolor esse error ducimus itaque ipsa facilis saepe rem veniam exercitationem quos magnam, odit perspiciatis.
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <div className="single-add-to-cart">
+                                                <form action="#" className="cart-quantity">
+                                                    <div className="quantity">
+                                                        <label>Quantity</label>
+                                                        <div className="cart-plus-minus">
+                                                            <input className="cart-plus-minus-box" value="1" type="text" />
+                                                            <div className="dec qtybutton"><i className="fa fa-angle-down"></i></div>
+                                                            <div className="inc qtybutton"><i className="fa fa-angle-up"></i></div>
+                                                        </div>
+                                                    </div>
+                                                    <button className="add-to-cart" type="submit">Add to cart</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
             <div className="li-main-blog-page li-main-blog-details-page pt-60 pb-60 pb-sm-45 pb-xs-45">
                 <div className="container">
@@ -186,30 +259,13 @@ function Shop(props) {
                                     </div>
                                 </div>
                                 <div className="li-blog-sidebar pt-25">
-                                    <h4 className="li-blog-sidebar-title">All Product</h4>
+                                    <h4 className="li-blog-sidebar-title">Menu</h4>
                                     <ul className="li-blog-archive">
                                         <li><Link to="/shop/all" style={id === 'all' ? { cursor: 'pointer', color: '#fed700' } : { cursor: 'pointer' }}>All</Link></li>
-                                    </ul>
-                                </div>
-                                <div className="li-blog-sidebar pt-25">
-                                    <h4 className="li-blog-sidebar-title">Male</h4>
-                                    <ul className="li-blog-archive">
                                         {
-                                            male && male.map(value => (
-                                                <li key={value._id}>
-                                                    <Link to={`/shop/${value._id}`} style={id === value._id ? { cursor: 'pointer', color: '#fed700' } : { cursor: 'pointer' }}>{value.category}</Link>
-                                                </li>
-                                            ))
-                                        }
-                                    </ul>
-                                </div>
-                                <div className="li-blog-sidebar">
-                                    <h4 className="li-blog-sidebar-title">Female</h4>
-                                    <ul className="li-blog-archive">
-                                        {
-                                            female && female.map(value => (
-                                                <li key={value._id}>
-                                                    <Link to={`/shop/${value._id}`} style={id === value._id ? { cursor: 'pointer', color: '#fed700' } : { cursor: 'pointer' }}>{value.category}</Link>
+                                            category && category.map(value => (
+                                                <li key={value.id_category}>
+                                                    <Link to={`/shop/${value.id_category}`} style={id === value.id_category ? { cursor: 'pointer', color: '#fed700' } : { cursor: 'pointer' }}>{value.name}</Link>
                                                 </li>
                                             ))
                                         }
@@ -234,7 +290,7 @@ function Shop(props) {
                                 <div className="tab-content">
                                     <div id="grid-view" className="tab-pane active" role="tabpanel">
                                         <div className="product-area shop-product-area">
-                                            <Products products={products} />
+                                            <Products products={products} GET_id_modal={GET_id_modal} />
                                         </div>
                                     </div>
                                     <div className="paginatoin-area">
