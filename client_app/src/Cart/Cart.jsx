@@ -6,15 +6,13 @@ import { deleteCart, updateCart } from '../Redux/Action/ActionCart';
 import { changeCount } from '../Redux/Action/ActionCount';
 import CartAPI from '../API/CartAPI'
 import queryString from 'query-string'
+import CartsLocal from '../Share/CartsLocal';
 
 Cart.propTypes = {
     
 };
 
 function Cart(props) {
-
-    //carts được lấy từ redux
-    const carts = useSelector(state => state.Cart.listCart)
 
     const dispatch = useDispatch()
 
@@ -29,31 +27,9 @@ function Cart(props) {
     // và tính tổng tiền
     useEffect(() => {
 
-        if (sessionStorage.getItem('id_user')){
+        set_list_carts(JSON.parse(localStorage.getItem('carts')))
 
-            const fetchData = async () => {
-                const params = {
-                    id_user: sessionStorage.getItem('id_user')
-                }
-    
-                const query = '?' + queryString.stringify(params)
-    
-                const response_carts = await CartAPI.Get_Cart(query)
-
-                set_list_carts(response_carts)
-
-                Sum_Price(response_carts, 0)
-            }
-
-            fetchData()
-
-        }else{
-            set_list_carts(carts)
-            
-            Sum_Price(carts, 0)
-
-        }
-
+        Sum_Price(JSON.parse(localStorage.getItem('carts')), 0)
 
     }, [count_change])
 
@@ -76,28 +52,10 @@ function Cart(props) {
 
         console.log(data)
 
-        if (sessionStorage.getItem('id_user')){ // Khi khách hàng đã đăng nhập
+        CartsLocal.updateProduct(data)
 
-            // Gọi API bằng phương thức PUT để cập nhật dữ liệu
-            const putData = async () => {
-                const query = '?' + queryString.stringify(data)
-
-                const response = await CartAPI.Put_Cart(query)
-                console.log(response)
-            }
-
-            putData()
-
-            const action_change_count = changeCount(count_change)
-            dispatch(action_change_count)
-
-        }else{ // Khi khách hàng chưa đăng nhập
-            const action = updateCart(data)
-            dispatch(action)
-    
-            const action_change_count = changeCount(count_change)
-            dispatch(action_change_count)
-        }
+        const action_change_count = changeCount(count_change)
+        dispatch(action_change_count)
 
     }
 
@@ -115,59 +73,21 @@ function Cart(props) {
 
         console.log(data)
 
-        if (sessionStorage.getItem('id_user')){ // Khi khách hàng đã đăng nhập
+        CartsLocal.updateProduct(data)
 
-            // Gọi API bằng phương thức PUT để cập nhật dữ liệu
-            const putData = async () => {
-                const query = '?' + queryString.stringify(data)
-
-                const response = await CartAPI.Put_Cart(query)
-                console.log(response)
-            }
-
-            putData()
-
-            const action_change_count = changeCount(count_change)
-            dispatch(action_change_count)
-
-        }else{ // Khi khách hàng chưa đăng nhập
-            const action = updateCart(data)
-            dispatch(action)
-    
-            const action_change_count = changeCount(count_change)
-            dispatch(action_change_count)
-        }
-
+        const action_change_count = changeCount(count_change)
+        dispatch(action_change_count)
+        
     }
 
     // Hàm này dùng để xóa giỏ hàng
     const handler_delete_carts = (id_cart) => {
         
-        if (sessionStorage.getItem('id_user')){ // Khi khách hàng đã đăng nhập
-            
-            const deleteData = async () => {
+        CartsLocal.deleteProduct(id_cart)
 
-                const response = await CartAPI.Delete_Cart(id_cart)
-
-                console.log("Xoa " + response)
-
-            }
-
-            deleteData()
-
-            const action_change_count = changeCount(count_change)
-            dispatch(action_change_count)
-
-        }else{ // Khi khách hàng chưa đăng nhập
-
-            const action = deleteCart(id_cart)
-            dispatch(action)
-
-            // Thay đổi trạng thái trong redux để load lại cart ở phần header
-            const action_change_count = changeCount(count_change)
-            dispatch(action_change_count)
-
-        }
+        // Thay đổi trạng thái trong redux để load lại cart ở phần header
+        const action_change_count = changeCount(count_change)
+        dispatch(action_change_count)
 
     }
 
@@ -276,16 +196,7 @@ function Cart(props) {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <div className="coupon-all">
-                                            <div className="coupon">
-                                                <input id="coupon_code" className="input-text" name="coupon_code" placeholder="Coupon code" type="text" />
-                                                <input className="button" name="apply_coupon" value="Apply coupon" type="submit" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                                 <div className="row">
                                     <div className="col-md-5 ml-auto">
                                         <div className="cart-page-total">

@@ -29,5 +29,8 @@ namespace API.Models
 
         [Column("image")]
         public string image { get; set; }
+
+        [Column("id_product")]
+        public string id_product { get; set; }
     }
 }

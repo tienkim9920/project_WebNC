@@ -7,9 +7,9 @@ const CommentAPI = {
         return axiosClient.get(url)
     },
 
-    post_comment: (query) => {
-        const url = `/api/Comment${query}`
-        return axiosClient.post(url)
+    post_comment: (data) => {
+        const url = `/api/Comment`
+        return axiosClient.post(url, data)
     }
 
 }

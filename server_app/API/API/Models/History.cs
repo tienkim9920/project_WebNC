@@ -15,34 +15,29 @@ namespace API.Models
         [Column("id_history")]
         public string id_history { get; set; }
 
-        [Column("id_user")]
-        public string id_user { get; set; }
-
-        [Column("fullname")]
-        public string fullname { get; set; }
-
-        [Column("phone")]
-        public string phone { get; set; }
-
         [Column("address")]
         public string address { get; set; }
-
-        [Column("email")]
-        public string email { get; set; }
 
         [Column("total")]
         public string total { get; set; }
 
         [Column("status")]
-        public bool status { get; set; }
+        public string status { get; set; }
 
-        [Column("delivery")]
-        public int delivery { get; set; }
+        [Column("pay")]
+        public bool pay { get; set; }
+
+        [Column("feeship")]
+        public int feeship { get; set; }
+
+        [Column("id_user")]
+        public string id_user { get; set; }
 
         [Column("id_payment")]
         public string id_payment { get; set; }
 
-        [Column("id_find")]
-        public string id_find { get; set; }
+        [Column("id_note")]
+        public string id_note { get; set; }
+
     }
 }

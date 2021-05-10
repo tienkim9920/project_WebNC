@@ -32,26 +32,11 @@ function Checkout(props) {
 
     useEffect(() => {
 
-        if (check_action){
-            const fetchData = async () => {
+        set_carts(JSON.parse(localStorage.getItem('carts')))
+    
+        Sum_Price(JSON.parse(localStorage.getItem('carts')), 0)
 
-                const params = {
-                    id_user: sessionStorage.getItem('id_user')
-                }
-    
-                const query = '?' + queryString.stringify(params)
-    
-                const response = await CartAPI.Get_Cart(query)
-                set_carts(response)
-    
-                Sum_Price(response, 0)
-    
-            }
-    
-            fetchData()
-
-            set_check_action(false)
-        }
+        set_check_action(false)
         
 
     }, [check_action])
@@ -148,77 +133,61 @@ function Checkout(props) {
 
         set_load_order(true)
 
-        const id_find = Math.random().toString()
         const id_history = Math.random().toString()
-        const id_delivery = Math.random().toString()
+        const id_note = Math.random().toString()
 
-        const body_history = {
-            //History
+        const body_order = {
+            //Order
             id_history: id_history,
-            id_user: sessionStorage.getItem('id_user'),
-            id_find: id_find,
-            fullname: information.fullname,
-            phone: information.phone,
             address: information.address,
-            email: email,
             total: total_price.toString(),
-            status: false,
-            delivery: 0,
+            status: "1",
+            pay: false,
+            feeship: parseInt(price),
+            id_user: sessionStorage.getItem('id_user'),
             id_payment: '60635313a1ba573dc01656b6', // Trực Tiếp
+            id_note: id_note
         }
 
-        const body_delivery = {
-            //Delivery
-            id_delivery: id_delivery,
-            id_history: id_history,
-            address_from: from,
-            address_to: information.address,
-            distance: distance,
-            duration: duration,
-            price: price
+        const body_note = {
+            //Note
+            id_note: id_note,
+            fullname: information.fullname.toString(),
+            phone: information.phone.toString()
         }
 
         const post_data = async () => {
 
             // Gọi API post history
-            const response = await OrderAPI.post_history(body_history)
+            const response = await OrderAPI.post_history(body_order)
 
             // Gọi API post delivery
-            const response_delivery = await OrderAPI.post_delivery(body_delivery)
+            const response_note = await OrderAPI.post_note(body_note)
 
-            // Gọi API Sendmail và post Detail_History và xóa data trong Cart
-            const params = {
-                id_find: id_find
-            }
-
-            const query = '?' + queryString.stringify(params)
-
-            const response_sendmail = await OrderAPI.post_sendmail(query)
-
-            console.log(response)
-            console.log(response_delivery)
-            console.log(response_sendmail)
+            // data carts
+            const data_carts = JSON.parse(localStorage.getItem('carts'))
 
             // Phần này là xử lý POST vào detail_history
-            for (let i = 0; i < carts.length; i++){
+            for (let i = 0; i < data_carts.length; i++){
 
                 const data = {
                     id_detail_history: "CT" + Math.random().toString(),
                     id_history: id_history,
-                    name_product: carts[i].name_product,
-                    price_product: carts[i].price_product,
-                    count: parseInt(carts[i].count),
-                    image: carts[i].image
+                    name_product: data_carts[i].name_product,
+                    price_product: data_carts[i].price_product,
+                    count: parseInt(data_carts[i].count),
+                    image: data_carts[i].image,
+                    id_product: data_carts[i].id_product
                 }
 
                 console.log(data)
 
                 // Gọi API post data thêm data vào Detail_History
-                const response_detail_history = await HistoryAPI.post_detail_history(data)
-
-                const resonse_delete_carts = await Cart.Delete_Cart(carts[i].id_cart)
+                await HistoryAPI.post_detail_history(data)
 
             }
+
+            localStorage.setItem('carts', JSON.stringify([]))
 
             set_redirect(true)
 

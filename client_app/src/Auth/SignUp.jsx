@@ -1,130 +1,67 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import User from '../API/User';
+import { useForm } from 'react-hook-form'
 
 SignUp.propTypes = {
 
 };
 
+const defaultValues = {
+    name:'',
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: ''
+};
+
 function SignUp(props) {
 
-    const [fullname, set_fullname] = useState('')
-    const [username, set_username] = useState('')
-    const [password, set_password] = useState('')
-    const [confirm, set_confirm] = useState('')
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues });
 
     const [show_success, set_show_success] = useState(false)
 
-    const [errorFullname, setFullnameError] = useState(false)
-    const [errorUsername, setUsernameError] = useState(false)
-    const [errorPassword, setPasswordError] = useState(false)
-    const [errorConfirm, setConfirmError] = useState(false)
     const [errorCheckPass, setCheckPass] = useState(false)
 
     const [username_exist, set_username_exist] = useState(false)
 
-    const handler_signup = (e) => {
+    const onSubmit = (data) => {
 
-        e.preventDefault()
-
-        if (!fullname) {
-            setFullnameError(true)
-            setUsernameError(false)
-            setPasswordError(false)
-            setConfirmError(false)
+        if (data.password !== data.confirmPassword)
+        {
+            setCheckPass(true)
             return
-        } else {
-            setFullnameError(false)
-            setUsernameError(false)
-            setPasswordError(false)
-            setConfirmError(false)
+        }
 
-            if (!username){
-                setFullnameError(false)
-                setUsernameError(true)
-                setPasswordError(false)
-                setConfirmError(false)
-                return
-            }else{
-                setFullnameError(false)
-                setUsernameError(false)
-                setPasswordError(false)
-                setConfirmError(false)
+        setCheckPass(false)
 
-                if (!password){
-                    setFullnameError(false)
-                    setUsernameError(false)
-                    setPasswordError(true)
-                    setConfirmError(false)
-                    return
-                }else{
-                    setFullnameError(false)
-                    setUsernameError(false)
-                    setPasswordError(false)
-                    setConfirmError(false)
+        const fetchData = async () => {
 
-                    if (!confirm){
-                        setFullnameError(false)
-                        setUsernameError(false)
-                        setPasswordError(false)
-                        setConfirmError(true)
-                        return
-                    }else{
-                        setFullnameError(false)
-                        setUsernameError(false)
-                        setPasswordError(false)
-                        setConfirmError(false)
-
-                        if (password !== confirm){
-                            setFullnameError(false)
-                            setUsernameError(false)
-                            setPasswordError(false)
-                            setConfirmError(false)
-                            setCheckPass(true)
-                            return
-                        }else{
-                            setConfirmError(false)
-                            setCheckPass(false)
-                            
-                            const fetchData = async () => {
-                                
-                                const data = {
-                                    id_user: Math.random().toString(),
-                                    username: username,
-                                    password: password,
-                                    fullname: fullname
-                                }
-
-                                const response = await User.Post_User(data)
-
-                                console.log(response)
-
-                                if (response === 'User Da Ton Tai'){
-                                    set_username_exist(true)
-                                }else{
-                                    set_show_success(true)
-
-                                }  
-                            }
-
-                            fetchData()
-
-                            set_fullname('')
-                            set_username('')
-                            set_password('')
-                            set_fullname('')
-                            set_confirm('')
-
-                        }
-
-                    }
-                    
-                }
+            const body = {
+                id_user: Math.random().toString(),
+                username: data.username.toString(),
+                password: data.confirmPassword.toString(),
+                fullname: data.name.toString(),
+                id_permission: '0.4859514654',
+                email: data.email.toString()
             }
 
+            console.log(body)
+
+            const response = await User.Post_User(body)
+
+            console.log(response)
+
+            set_show_success(true)
+
+            reset(defaultValues)
+
         }
-        
+
+        fetchData()
+
+
         setTimeout(() => {
             set_show_success(false)
         }, 1500)
@@ -136,15 +73,15 @@ function SignUp(props) {
         <div>
 
             {
-                show_success && 
-                    <div className="modal_success">
-                        <div className="group_model_success pt-3">
-                            <div className="text-center p-2">
-                                <i className="fa fa-bell fix_icon_bell" style={{ fontSize: '40px', color: '#fff' }}></i>
-                            </div>
-                            <h4 className="text-center p-3" style={{ color: '#fff' }}>Bạn Đã Đăng Ký Thành Công!</h4>
+                show_success &&
+                <div className="modal_success">
+                    <div className="group_model_success pt-3">
+                        <div className="text-center p-2">
+                            <i className="fa fa-bell fix_icon_bell" style={{ fontSize: '40px', color: '#fff' }}></i>
                         </div>
+                        <h4 className="text-center p-3" style={{ color: '#fff' }}>Bạn Đã Đăng Ký Thành Công!</h4>
                     </div>
+                </div>
             }
 
             <div className="breadcrumb-area">
@@ -161,22 +98,33 @@ function SignUp(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12 col-md-12 col-lg-6 col-xs-12 mr_signin">
-                            <form action="#">
+                            <form onSubmit={handleSubmit(onSubmit)}>
                                 <div className="login-form">
                                     <h4 className="login-title">Register</h4>
                                     <div className="row">
                                         <div className="col-md-12 mb-20">
                                             <label>Full Name *</label>
-                                            <input className="mb-0" type="text" placeholder="First Name" value={fullname} onChange={(e) => set_fullname(e.target.value)} />
+                                            <input className="mb-0" type="text" placeholder="First Name" 
+                                            name="name"
+                                            ref={register({ required: true })}
+                                            />
                                             {
-                                                errorFullname && <span style={{ color: 'red' }}>* Fullname is required!</span>
-                                            }  
+                                                errors.name && errors.name.type === "required" && <span style={{ color: 'red' }}>* Fullname is required</span>
+                                            }
+                                        </div>
+                                        <div className="col-md-12 mb-20">
+                                            <label>Email *</label>
+                                            <input className="mb-0" type="text" placeholder="Email" 
+                                            name="email" ref={register({ required: true })} />
+                                            {
+                                                errors.email && errors.email.type === "required" && <span style={{ color: 'red' }}>* Email is required</span>
+                                            }
                                         </div>
                                         <div className="col-md-12 mb-20">
                                             <label>Username *</label>
-                                            <input className="mb-0" type="text" placeholder="Username" value={username} onChange={(e) => set_username(e.target.value)} />
+                                            <input className="mb-0" type="text" placeholder="Username" name="username" ref={register({ required: true })} />
                                             {
-                                                errorUsername && <span style={{ color: 'red' }}>* Username is required!</span>
+                                                errors.username && errors.username.type === "required" && <span style={{ color: 'red' }}>* Username is required</span>
                                             }
                                             {
                                                 username_exist && <span style={{ color: 'red' }}>* Username is Existed!</span>
@@ -184,16 +132,16 @@ function SignUp(props) {
                                         </div>
                                         <div className="col-md-6 mb-20">
                                             <label>Password *</label>
-                                            <input className="mb-0" type="password" placeholder="Password" value={password} onChange={(e) => set_password(e.target.value)} />
+                                            <input className="mb-0" type="password" placeholder="Password" name="password" ref={register({ required: true })} />
                                             {
-                                                errorPassword && <span style={{ color: 'red' }}>* Password is required!</span>
+                                                errors.password && errors.password.type === "required" && <span style={{ color: 'red' }}>* Password is required</span>
                                             }
                                         </div>
                                         <div className="col-md-6 mb-20">
                                             <label>Confirm Password *</label>
-                                            <input className="mb-0" type="password" placeholder="Confirm Password" value={confirm} onChange={(e) => set_confirm(e.target.value)} />
+                                            <input className="mb-0" type="password" placeholder="Confirm Password" name="confirmPassword" ref={register({ required: true })} />
                                             {
-                                                errorConfirm && <span style={{ color: 'red' }}>* Confirm Password is required!</span>
+                                                errors.confirmPassword && errors.confirmPassword.type === "required" && <span style={{ color: 'red' }}>*Confirm Password is required</span>
                                             }
                                             {
                                                 errorCheckPass && <span style={{ color: 'red' }}>* Checking Again Confirm Password!</span>
@@ -205,7 +153,7 @@ function SignUp(props) {
                                             </div>
                                         </div>
                                         <div className="col-12">
-                                            <button className="register-button mt-0" style={{ cursor: 'pointer' }} onClick={handler_signup}>Register</button>
+                                            <button className="register-button mt-0" style={{ cursor: 'pointer' }} type="submit" >Register</button>
                                         </div>
                                     </div>
                                 </div>

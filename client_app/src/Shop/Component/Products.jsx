@@ -61,17 +61,6 @@ function Products(props) {
                                         <span className="new-price">${value.price_product}</span>
                                     </div>
                                 </div>
-                                <div className="add_actions">
-                                    <ul className="add-actions-link">
-                                        <li><a className="links-details" href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                        <li><a className="links-details" href="#"><i className="fa fa-heart-o"></i></a></li>
-                                        <li><a href="#" title="quick view"
-                                            className="links-details"
-                                            data-toggle="modal"
-                                            data-target={`#${value.id_product}`}
-                                            onClick={() => GET_id_modal(`${value.id_product}`)}><i className="fa fa-eye"></i></a></li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
                     </div>

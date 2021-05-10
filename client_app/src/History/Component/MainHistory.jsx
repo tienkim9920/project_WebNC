@@ -57,10 +57,7 @@ function MainHistory(props) {
                                         <thead>
                                             <tr>
                                                 <th className="li-product-remove">ID Invoice</th>
-                                                <th className="li-product-thumbnail">Name</th>
-                                                <th className="cart-product-name">Phone</th>
                                                 <th className="li-product-price">Address</th>
-                                                <th className="li-product-price">Email</th>
                                                 <th className="li-product-quantity">Total</th>
                                                 <th className="li-product-subtotal">Payment</th>
                                                 <th className="li-product-subtotal">Status</th>
@@ -69,20 +66,18 @@ function MainHistory(props) {
                                         <tbody>
                                             {
                                                 history && history.map(value => (
-                                                    <tr>
+                                                    <tr key={value.id_history}>
                                                         <td className="li-product-price"><span className="amount"><Link to={`/history/${value.id_history}`}>View</Link></span></td>
-                                                        <td className="li-product-price"><span className="amount">{value.fullname}</span></td>
-                                                        <td className="li-product-price"><span className="amount">{value.phone}</span></td>
                                                         <td className="li-product-price"><span className="amount">{value.address}</span></td>
-                                                        <td className="li-product-price"><span className="amount">{value.email}</span></td>
                                                         <td className="li-product-price"><span className="amount">{value.total}</span></td>
-                                                        <td className="li-product-price"><span className="amount" style={value.status ? { color: 'green'} : { color: 'red'}}>{value.status ? 'Paid' : 'Unpaid'}</span></td>
-                                                        <td className="li-product-price"><span className="amount">
+                                                        <td className="li-product-price"><span className="amount" style={value.pay ? { color: 'green'} : { color: 'red'}}>{value.status ? 'Paid' : 'Unpaid'}</span></td>
+                                                        <td className="li-product-price">
+                                                            <span className="amount" style={{ cursor: 'pointer' }}>
                                                             {
-                                                            value.delivery === 0 ? 'X' : 
-                                                            (value.delivery === 1 ? 'Confirmed' : 
-                                                            (value.delivery === 2 ? 'Shipping' : 
-                                                            (value.delivery === 3 ? 'Finished' : 'Undifine'))) }
+                                                            value.status === '1' ? 'X' : 
+                                                            (value.status === '2' ? 'Confirmed' : 
+                                                            (value.status === '3' ? 'Shipping' : 
+                                                            (value.status === '4' ? 'Finished' : 'Undifine'))) }
                                                             </span>
                                                         </td>
                                                     </tr>

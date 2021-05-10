@@ -23,5 +23,12 @@ namespace API.Models
 
         [Column("fullname")]
         public string fullname { get; set; }
+
+        [Column("email")]
+        public string email { get; set; }
+
+        [Column("id_permission")]
+        public string id_permission { get; set; }
+
     }
 }

@@ -10,8 +10,28 @@ import { addSession, deleteSession } from '../Redux/Action/ActionSession';
 import queryString from 'query-string'
 import CategoryAPI from '../API/CategoryAPI';
 import Product from '../API/Product';
+import CartsLocal from './CartsLocal';
 
 function Header(props) {
+
+    // State count of cart
+    const [count_cart, set_count_cart] = useState(0)
+
+    const [total_price, set_total_price] = useState(0)
+    
+    const [carts_mini, set_carts_mini] = useState([])
+
+    // Hàm này để khởi tạo localStorage dùng để lưu trữ giỏ hàng
+    // Và nó sẽ chạy lần đầu
+    useEffect(() => {
+
+        if (localStorage.getItem('carts') !== null) {
+            set_carts_mini(JSON.parse(localStorage.getItem('carts')));
+        } else {
+            localStorage.setItem('carts', JSON.stringify([]))
+        }
+
+    }, [])
 
     // Xử lý thanh navigation
     const [header_navbar, set_header_navbar] = useState('header-bottom header-sticky')
@@ -33,11 +53,6 @@ function Header(props) {
     if (sessionStorage.getItem('id_user')){
         const action = addSession(sessionStorage.getItem('id_user'))
         dispatch(action)
-    }else{
-        //Đưa idTemp vào Redux temp để tạm lưu trữ
-        sessionStorage.setItem('id_temp', 'abc999')
-        const action = addUser(sessionStorage.getItem('id_temp'))
-        dispatch(action)
     }
 
     //Get IdUser từ redux khi user đã đăng nhập
@@ -53,13 +68,11 @@ function Header(props) {
     // Hàm này dùng để hiện thị
     useEffect(() => {
 
-        if (!id_user){ // user chưa đăng nhâp
+        if (id_user === ''){ // user chưa đăng nhâp
 
             set_active_user(false)
 
         }else{ // user đã đăng nhâp
-
-            set_active_user(true)
 
             const fetchData = async () => {
 
@@ -67,19 +80,11 @@ function Header(props) {
 
                 set_user(response)
 
-                const params = {
-                    id_user: sessionStorage.getItem('id_user')
-                }
-    
-                const query = '?' + queryString.stringify(params)
-    
-                const response_carts = await Cart.Get_Cart(query)
-    
-                showData(response_carts, 0, 0)
-
             }
 
             fetchData()
+
+            set_active_user(true)
         }
 
     }, [id_user])
@@ -96,13 +101,6 @@ function Header(props) {
     }
 
 
-    // State count of cart
-    const [count_cart, set_count_cart] = useState(0)
-
-    const [total_price, set_total_price] = useState(0)
-
-    const [carts_mini, set_carts_mini] = useState([])
-
     // Get trạng thái từ redux khi user chưa đăng nhập
     const count = useSelector(state => state.Count.isLoad)
 
@@ -112,31 +110,11 @@ function Header(props) {
 
         if (count){
 
-            if (sessionStorage.getItem('id_user')){ // khách hàng đã đăng nhập thì lại tiếp tục gọi API GET data
-
-                const fetchData = async () => {
-                    const params = {
-                        id_user: sessionStorage.getItem('id_user')
-                    }
-        
-                    const query = '?' + queryString.stringify(params)
-        
-                    const response_carts = await Cart.Get_Cart(query)
-        
-                    showData(response_carts, 0, 0)
-
-                }
-
-                fetchData()
-
-            }else{ // khách hàng chưa đăng nhập
-                
-                showData(carts, 0, 0)
-
-            }
+            showData(JSON.parse(localStorage.getItem('carts')), 0, 0)
 
             const action = changeCount(count)
             dispatch(action)
+
         }
 
     }, [count])
@@ -161,30 +139,10 @@ function Header(props) {
     // Hàm này dùng để xóa carts_mini
     const handler_delete_mini = (id_cart) => {
 
-        if (sessionStorage.getItem('id_user')){ // Khi khách hàng đã đăng nhập thì gọi API với phương thức DELETE
+        CartsLocal.deleteProduct(id_cart)
 
-            const deleteData = async () => {
-
-                const response = await Cart.Delete_Cart(id_cart)
-
-                console.log("Xoa " + response)
-
-            }
-
-            deleteData()
-
-            const action_change_count = changeCount(count)
-            dispatch(action_change_count)
-            
-        }else{
-
-            const action = deleteCart(id_cart)
-            dispatch(action)
-
-            const action_change_count = changeCount(count)
-            dispatch(action_change_count)
-
-        }
+        const action_change_count = changeCount(count)
+        dispatch(action_change_count)
 
     }
 

@@ -7,30 +7,19 @@ using System.Threading.Tasks;
 
 namespace API.Models
 {
-    [Table("Delivery")]
+    [Table("Note")]
     public class Delivery
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Column("id_delivery")]
-        public string id_delivery { get; set; }
+        [Column("id_note")]
+        public string id_note { get; set; }
 
-        [Column("id_history")]
-        public string id_history { get; set; }
+        [Column("fullname")]
+        public string fullname { get; set; }
 
-        [Column("address_from")]
-        public string address_from { get; set; }
+        [Column("phone")]
+        public string phone { get; set; }
 
-        [Column("address_to")]
-        public string address_to { get; set; }
-
-        [Column("distance")]
-        public string distance { get; set; }
-
-        [Column("duration")]
-        public string duration { get; set; }
-
-        [Column("price")]
-        public string price { get; set; }
     }
 }

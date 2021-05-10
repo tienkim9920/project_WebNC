@@ -9,6 +9,9 @@ import bg7 from '../CSS/Image/7.jpg'
 import Home_Category from './Component/Home_Category';
 import Home_Product from './Component/Home_Product';
 import Product from '../API/Product';
+import CartsLocal from '../Share/CartsLocal';
+import { changeCount } from '../Redux/Action/ActionCount';
+import { useDispatch, useSelector } from 'react-redux';
 
 Home.propTypes = {
 
@@ -44,6 +47,37 @@ function Home(props) {
         }
 
     }, [id_modal])
+
+    
+    // Get count từ redux khi user chưa đăng nhập
+    const count_change = useSelector(state => state.Count.isLoad)
+
+    //id_user được lấy từ redux
+    const id_user = useSelector(state => state.Cart.id_user)
+
+    const dispatch = useDispatch()
+
+    // Hàm này dùng để thêm vào giỏ hàng
+    const handler_addcart = (e) => {
+
+        e.preventDefault()
+
+        const data = {
+            id_user: sessionStorage.getItem('id_user') ? sessionStorage.getItem('id_user') : id_user,
+            id_product: id_modal,
+            name_product: product_detail.name_product,
+            price_product: product_detail.price_product,
+            count: 1,
+            image: product_detail.image,
+            id_cart: Math.random().toString()
+        }
+
+        CartsLocal.addProduct(data)
+
+        const action_count_change = changeCount(count_change)
+        dispatch(action_count_change)
+
+    }
 
 
 
@@ -154,15 +188,7 @@ function Home(props) {
                                                 </p>
                                             </div>
                                             <div className="single-add-to-cart">
-                                                <form action="#" className="cart-quantity">
-                                                    <div className="quantity">
-                                                        <label>Quantity</label>
-                                                        <div className="cart-plus-minus">
-                                                            <input className="cart-plus-minus-box" value="1" type="text" />
-                                                            <div className="dec qtybutton"><i className="fa fa-angle-down"></i></div>
-                                                            <div className="inc qtybutton"><i className="fa fa-angle-up"></i></div>
-                                                        </div>
-                                                    </div>
+                                                <form onSubmit={handler_addcart} className="cart-quantity">
                                                     <button className="add-to-cart" type="submit">Add to cart</button>
                                                 </form>
                                             </div>

@@ -12,9 +12,14 @@ const OrderAPI = {
         return axiosClient.post(url, data)
     },
 
-    post_delivery: (data) => {
+    post_note: (data) => {
         const url = `/api/Delivery`
         return axiosClient.post(url, data)
+    },
+
+    get_note: (id) => {
+        const url = `/api/Delivery/${id}`
+        return axiosClient.get(url)
     },
 
     post_sendmail: (query) => {

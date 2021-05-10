@@ -27,19 +27,8 @@ namespace API.Models
         [Column("comment")]
         public string comment { get; set; }
 
-        [Column("star1")]
-        public string star1 { get; set; }
+        [Column("star")]
+        public int star { get; set; }
 
-        [Column("star2")]
-        public string star2 { get; set; }
-
-        [Column("star3")]
-        public string star3 { get; set; }
-
-        [Column("star4")]
-        public string star4 { get; set; }
-
-        [Column("star5")]
-        public string star5 { get; set; }
     }
 }

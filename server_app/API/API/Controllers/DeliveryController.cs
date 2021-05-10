@@ -29,5 +29,16 @@ namespace API.Controllers
 
             return Ok("Thanh Cong");
         }
+
+        [HttpGet("{id_note}")]
+        public ActionResult<Delivery> Get_Delivery(string id_note)
+        {
+
+            var delivery = _context.Delivery.SingleOrDefault(value => value.id_note.Equals(id_note));
+
+            return Ok(delivery);
+
+        }
+
     }
 }

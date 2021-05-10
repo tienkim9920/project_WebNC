@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './Profile.css'
 import avt from './avt.jpg'
+import User from '../API/User';
 
 Profile.propTypes = {
 
@@ -12,9 +13,7 @@ function Profile(props) {
     
     const [name, set_name] = useState('')
     const [username, set_username] = useState('')
-    const [website, set_website] = useState('')
     const [email, set_email] = useState('')
-    const [phone, set_phone] = useState('')
     const [password, set_password] = useState('')
     const [new_password, set_new_password] = useState('')
     const [compare_password, set_compare_password] = useState('')
@@ -28,6 +27,32 @@ function Profile(props) {
         set_edit_status(value)
 
     }
+
+    const [user, set_user] = useState({})
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+
+            const response = await User.Get_User(sessionStorage.getItem('id_user'))
+
+            set_user(response)
+
+            set_name(response.fullname)
+
+            set_username(response.username)
+
+            set_email(response.email)
+
+            set_password(response.password)
+            set_new_password(response.password)
+            set_compare_password(response.password)
+
+        }
+
+        fetchData()
+
+    }, [])
 
 
     return (
@@ -102,29 +127,11 @@ function Profile(props) {
                                     </div>
                                     <div className="txt_setting_edit pt-3 pb-2">
                                         <div className="d-flex justify-content-center align-items-center">
-                                            <span style={{ fontWeight: '600' }}>Website</span>
-                                        </div>
-                                        <div>
-                                            <input className="txt_input_edit" type="text" value={website}
-                                                onChange={(e) => set_website(e.target.value)} />
-                                        </div>
-                                    </div>
-                                    <div className="txt_setting_edit pt-3 pb-2">
-                                        <div className="d-flex justify-content-center align-items-center">
                                             <span style={{ fontWeight: '600' }}>Email</span>
                                         </div>
                                         <div>
                                             <input className="txt_input_edit" type="text" disabled={true} value={email}
                                                 onChange={(e) => set_email(e.target.value)} />
-                                        </div>
-                                    </div>
-                                    <div className="txt_setting_edit pt-3 pb-2">
-                                        <div className="d-flex justify-content-center align-items-center">
-                                            <span style={{ fontWeight: '600' }}>Phone Number</span>
-                                        </div>
-                                        <div>
-                                            <input className="txt_input_edit" type="text" value={phone}
-                                                onChange={(e) => set_phone(e.target.value)} />
                                         </div>
                                     </div>
                                     <div className="d-flex justify-content-center pt-3 pb-4">

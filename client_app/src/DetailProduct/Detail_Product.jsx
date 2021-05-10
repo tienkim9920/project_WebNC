@@ -11,6 +11,7 @@ import Cart from '../API/CartAPI';
 import CommentAPI from '../API/CommentAPI';
 import User from '../API/User';
 import queryString from 'query-string'
+import CartsLocal from '../Share/CartsLocal';
 
 Detail_Product.propTypes = {
 
@@ -65,33 +66,12 @@ function Detail_Product(props) {
             id_cart: Math.random().toString()
         }
 
-        if (sessionStorage.getItem('id_user')) { // User đã đăng nhập
-            // Khi đăng nhập thành công thì nó sẽ gọi API phương thức POST
-            const postData = async () => {
+        CartsLocal.addProduct(data)
 
-                const response = await Cart.Post_Cart(data)
-                console.log(response)
+        const action_count_change = changeCount(count_change)
+        dispatch(action_count_change)
 
-            }
-
-            postData()
-
-            const action_count_change = changeCount(count_change)
-            dispatch(action_count_change)
-
-            set_show_success(true)
-
-        } else { // User chưa đăng nhập
-
-            const action = addCart(data)
-            dispatch(action)
-
-            const action_count_change = changeCount(count_change)
-            dispatch(action_count_change)
-
-            set_show_success(true)
-
-        }
+        set_show_success(true)
 
         setTimeout(() => {
             set_show_success(false)
@@ -132,7 +112,7 @@ function Detail_Product(props) {
     const [list_comment, set_list_comment] = useState([])
 
     // Hàm này dùng để gọi API post comment sản phẩm của user
-    const handler_Comment = () => {
+    const handler_Comment = async () => {
 
         if (!sessionStorage.getItem('id_user')) { // Khi khách hàng chưa đăng nhập
 
@@ -140,37 +120,42 @@ function Detail_Product(props) {
 
         } else { // Khi khách hàng đã đăng nhập
 
-            if (!comment){
+            if (!comment) {
                 set_validation_comment(true)
                 return
             }
 
-            const post_Data = async () => {
+            const res_user = await User.Get_User(sessionStorage.getItem('id_user'))
 
-                const params = {
+            console.log(res_user)
+
+            const post_data = async () => {
+
+                const data = {
                     id_comment: Math.random().toString(),
-                    id_product: id,
-                    id_user: sessionStorage.getItem('id_user'),
-                    comment: comment,
-                    star: star
+                    id_product: id.toString(),
+                    id_user: sessionStorage.getItem('id_user').toString(),
+                    fullname: res_user.fullname.toString(),
+                    comment: comment.toString(),
+                    star: parseInt(star)
                 }
-
-                const query = '?' + queryString.stringify(params)
-
-                const response = await CommentAPI.post_comment(query)
+    
+                const response = await CommentAPI.post_comment(data)
 
                 console.log(response)
 
+                console.log("123")
+
+                set_modal(false)
+    
                 set_load_comment(true)
+
+                set_comment('')
 
             }
 
-            post_Data()
+            post_data()
 
-            set_comment('')
-
-            set_modal(false)
-            
         }
 
         setTimeout(() => {
@@ -184,9 +169,12 @@ function Detail_Product(props) {
     useEffect(() => {
 
         if (load_comment) {
+
             const fetchData = async () => {
 
                 const response = await CommentAPI.get_comment(id)
+
+                console.log(response)
 
                 set_list_comment(response)
 
@@ -195,6 +183,7 @@ function Detail_Product(props) {
             fetchData()
 
             set_load_comment(false)
+
         }
 
     }, [load_comment])
@@ -312,11 +301,11 @@ function Detail_Product(props) {
                                                 <div className="comment-author-infos pt-25" key={value.id_comment}>
                                                     <span>{value.fullname} <div style={{ fontWeight: '400' }}>{value.comment}</div></span>
                                                     <ul className="rating">
-                                                        <li><i className={value.star1}></i></li>
-                                                        <li><i className={value.star2}></i></li>
-                                                        <li><i className={value.star3}></i></li>
-                                                        <li><i className={value.star4}></i></li>
-                                                        <li><i className={value.star5}></i></li>
+                                                        <li><i className={value.star > 0 ? 'fa fa-star' : 'fa fa-star-o'}></i></li>
+                                                        <li><i className={value.star > 1 ? 'fa fa-star' : 'fa fa-star-o'}></i></li>
+                                                        <li><i className={value.star > 2 ? 'fa fa-star' : 'fa fa-star-o'}></i></li>
+                                                        <li><i className={value.star > 3 ? 'fa fa-star' : 'fa fa-star-o'}></i></li>
+                                                        <li><i className={value.star > 4 ? 'fa fa-star' : 'fa fa-star-o'}></i></li>
                                                     </ul>
                                                 </div>
 

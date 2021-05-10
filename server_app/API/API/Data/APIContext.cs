@@ -22,39 +22,68 @@ namespace API.Data
         public DbSet<Delivery> Delivery { get; set; }
         public DbSet<DetailHistory> DetailHistory { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder
-        //        .Entity<User>(eb =>
-        //        {
-        //            eb.HasNoKey();
-        //            //eb.ToView("User");
-        //            //eb.Property(v => v.id_user).HasColumnName("id_user");
-        //        });
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
 
-        //    modelBuilder
-        //        .Entity<Category>(eb =>
-        //        {
-        //            eb.HasNoKey();
-        //            eb.ToView("Category");
-        //            eb.Property(v => v.id_category).HasColumnName("id_category");
-        //        });
+            //modelBuilder.Entity<User>()
+            //    .HasMany(u => u.Comments)
+            //    .WithOne(c => c.User)
+            //    .HasForeignKey("id_user");
 
-        //    modelBuilder
-        //        .Entity<Product>(eb =>
-        //        {
-        //            eb.HasNoKey();
-        //            eb.ToView("Product");
-        //            eb.Property(v => v.id_product).HasColumnName("id_product");
-        //        });
+            //modelBuilder.Entity<Comment>()
+            //    .HasOne(c => c.User)
+            //    .WithMany(u => u.Comments)
+            //    .HasForeignKey("id_user");
 
-        //    modelBuilder
-        //        .Entity<Cart>(eb =>
-        //        {
-        //            eb.HasNoKey();
-        //            eb.ToView("Cart");
-        //            eb.Property(v => v.id_cart).HasColumnName("id_cart");
-        //        });
-        //}
+            //modelBuilder.Entity<Comment>()
+            //    .HasOne<User>(c => c.User)
+            //    .WithMany(u => u.GetComments)
+            //    .HasForeignKey(c => c.id_user);
+
+            //modelBuilder.Entity<User>()
+            //    .HasMany<Comment>(c => c.GetComments)
+            //    .WithOne(c => c.User)
+            //    .HasForeignKey(c => c.id_user);
+
+            //modelBuilder
+            //    .Entity<User>(eb =>
+            //    {
+            //        eb.HasKey("id_user");
+            //        eb.ToView("User");
+            //        eb.Property(v => v.id_user).HasColumnName("id_user");
+            //    });
+
+            //modelBuilder
+            //    .Entity<Comment>(eb =>
+            //    {
+            //        eb.HasKey("id_comment");
+            //        eb.ToView("Comment");
+            //        eb.Property(v => v.id_user).HasColumnName("id_user");
+            //    });
+
+            //modelBuilder
+            //    .Entity<Category>(eb =>
+            //    {
+            //        eb.HasNoKey();
+            //        eb.ToView("Category");
+            //        eb.Property(v => v.id_category).HasColumnName("id_category");
+            //    });
+
+            //modelBuilder
+            //    .Entity<Product>(eb =>
+            //    {
+            //        eb.HasNoKey();
+            //        eb.ToView("Product");
+            //        eb.Property(v => v.id_product).HasColumnName("id_product");
+            //    });
+
+            //modelBuilder
+            //    .Entity<Cart>(eb =>
+            //    {
+            //        eb.HasNoKey();
+            //        eb.ToView("Cart");
+            //        eb.Property(v => v.id_cart).HasColumnName("id_cart");
+            //    });
+        }
     }
 }
