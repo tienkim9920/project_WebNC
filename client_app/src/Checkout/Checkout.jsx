@@ -33,11 +33,11 @@ function Checkout(props) {
     useEffect(() => {
 
         set_carts(JSON.parse(localStorage.getItem('carts')))
-    
+
         Sum_Price(JSON.parse(localStorage.getItem('carts')), 0)
 
         set_check_action(false)
-        
+
 
     }, [check_action])
 
@@ -158,17 +158,20 @@ function Checkout(props) {
 
         const post_data = async () => {
 
+            // Gọi API post delivery
+            const response_note = await OrderAPI.post_note(body_note)
+
+
             // Gọi API post history
             const response = await OrderAPI.post_history(body_order)
 
-            // Gọi API post delivery
-            const response_note = await OrderAPI.post_note(body_note)
+
 
             // data carts
             const data_carts = JSON.parse(localStorage.getItem('carts'))
 
             // Phần này là xử lý POST vào detail_history
-            for (let i = 0; i < data_carts.length; i++){
+            for (let i = 0; i < data_carts.length; i++) {
 
                 const data = {
                     id_detail_history: "CT" + Math.random().toString(),
@@ -477,9 +480,9 @@ function Checkout(props) {
                                                         <div className="card-body">
                                                             {
                                                                 show_error ? 'Please Checking Information!' :
-                                                                    <Paypal 
-                                                                        information={information} 
-                                                                        total={total_price} 
+                                                                    <Paypal
+                                                                        information={information}
+                                                                        total={total_price}
                                                                         Change_Load_Order={Change_Load_Order}
                                                                         from={from}
                                                                         distance={distance}
