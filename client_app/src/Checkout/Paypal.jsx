@@ -91,19 +91,19 @@ function Paypal(props) {
                     phone: information.phone.toString()
                 }
 
-                console.log(body_order)
+
+                // Gọi API post delivery
+                const response_note = await OrderAPI.post_note(body_note)
 
                 // Gọi API post history
                 const response = await OrderAPI.post_history(body_order)
 
-                // Gọi API post delivery
-                const response_note = await OrderAPI.post_note(body_note)
 
                 // data carts
                 const data_carts = JSON.parse(localStorage.getItem('carts'))
 
                 // Phần này là xử lý POST vào detail_history
-                for (let i = 0; i < data_carts.length; i++){
+                for (let i = 0; i < data_carts.length; i++) {
 
                     const data = {
                         id_detail_history: "CT" + Math.random().toString(),
