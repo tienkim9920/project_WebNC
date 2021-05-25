@@ -38,6 +38,12 @@ function Detail_Product(props) {
 
             const response = await Product.Get_Detail_Product(id)
 
+            if (response.image.substring(0, 5) !== 'https') {
+                response.image = "data:image/png;base64," + response.image
+            }
+
+
+
             set_product(response)
 
         }
@@ -63,7 +69,7 @@ function Detail_Product(props) {
             price_product: product.price_product,
             count: count,
             image: product.image,
-            id_cart: Math.random().toString()
+            id_cart: Math.random().toString().replace(".", "")
         }
 
         CartsLocal.addProduct(data)
@@ -139,7 +145,7 @@ function Detail_Product(props) {
                     comment: comment.toString(),
                     star: parseInt(star)
                 }
-    
+
                 const response = await CommentAPI.post_comment(data)
 
                 console.log(response)
@@ -147,7 +153,7 @@ function Detail_Product(props) {
                 console.log("123")
 
                 set_modal(false)
-    
+
                 set_load_comment(true)
 
                 set_comment('')

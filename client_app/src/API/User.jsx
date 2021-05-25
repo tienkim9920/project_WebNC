@@ -16,10 +16,25 @@ const User = {
         const url = `/api/User/detail${query}`
         return axiosClient.get(url)
     },
-
+    Change_Profile: (query) => {
+        const url = `/api/User/${query}`
+        return axiosClient.put(url)
+    },
+    Change_Password: (query) => {
+        const url = `/api/User/changepassword${query}`
+        return axiosClient.put(url)
+    },
+    Forget: (query) => {
+        const url = `/api/User/forget${query}`
+        return axiosClient.put(url)
+    },
     Post_User: (data) => {
         const url = '/api/User'
         return axiosClient.post(url, data)
+    },
+    Post_OTP: (query) => {
+        const url = `/api/User/otp${query}`
+        return axiosClient.get(url)
     }
 
 }

@@ -44,10 +44,10 @@ function Checkout(props) {
     // Hàm này dùng để tính tổng tiền
     function Sum_Price(carts, sum_price) {
         carts.map(value => {
-            return sum_price += parseInt(value.count) * parseInt(value.price_product)
+            return sum_price += Number(value.count) * Number(value.price_product)
         })
 
-        const total = sum_price + parseInt(price)
+        const total = Number(sum_price) + Number(price)
 
         set_total_price(total)
     }
@@ -133,8 +133,8 @@ function Checkout(props) {
 
         set_load_order(true)
 
-        const id_history = Math.random().toString()
-        const id_note = Math.random().toString()
+        const id_history = Math.random().toString().replace(".", "")
+        const id_note = Math.random().toString().replace(".", "")
 
         const body_order = {
             //Order
@@ -174,7 +174,7 @@ function Checkout(props) {
             for (let i = 0; i < data_carts.length; i++) {
 
                 const data = {
-                    id_detail_history: "CT" + Math.random().toString(),
+                    id_detail_history: "CT" + Math.random().toString().replace(".", ""),
                     id_history: id_history,
                     name_product: data_carts[i].name_product,
                     price_product: data_carts[i].price_product,

@@ -4,39 +4,130 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    @Styles.Render("~/Assets/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css")
+    @Styles.Render("~/Assets/dist/css/style.min.css")
+    @Styles.Render("~/Assets/dist/css/app.css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+    <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+
+        <header class="topbar" data-navbarbg="skin6">
+            <nav class="navbar top-navbar navbar-expand-md">
+                <div class="navbar-header" data-logobg="skin6">
+
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                        <i class="ti-menu ti-close"></i>
+                    </a>
+
+                    <div class="navbar-brand">
+                        <!-- Logo icon -->
+                        <a href="index.html">
+                            <b class="logo-icon">
+                                <!-- Dark Logo icon -->
+                                <img src="~/Assets/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                                <!-- Light Logo icon -->
+                                <img src="~/Assets/assets/images/logo-icon.png" alt="homepage" class="light-logo" />
+                            </b>
+                            <!--End Logo icon -->
+                            <!-- Logo text -->
+                            <span class="logo-text">
+                                <!-- dark Logo text -->
+                                <img src="~/Assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                                <!-- Light Logo text -->
+                                <img src="~/Assets/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+                            </span>
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+
+                    <ul class="navbar-nav float-left mr-auto ml-3 pl-1">
+                        <li class="nav-item dropdown">
+                            <i data-feather="settings" class="svg-icon"></i>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav float-right">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <span class="ml-2 d-none d-lg-inline-block">
+                                    @if (Session["fullname"] == null)
+                                    {
+                                        <span>Hello</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Hello,</span> <span class="text-dark">@Session["fullname"]</span>
+                                    }
+
+                                    <i data-feather="chevron-down" class="svg-icon"></i>
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
+                                <a href="@Url.Action("LogOut","Login")" class="dropdown-item">
+                                    <i data-feather="power" class="svg-icon mr-2 ml-1"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="left-sidebar" data-sidebarbg="skin6">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar" data-sidebarbg="skin6">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+
+                        <li class="nav-small-cap"><span class="hide-menu">Components</span></li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                               aria-expanded="false">
+                                <i data-feather="grid" class="feather-icon"></i><span class="hide-menu">Tables </span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level base-level-line">
+                                @{Html.RenderAction("MenuCategories", "Login");}
+                            </ul>
+                        </li>
+
+
+                    </ul>
+                </nav>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </div>
+        </aside>
+        <div class="page-wrapper">
+
+            @RenderBody()
+            <footer class="footer text-center text-muted">
+                All Rights Reserved by Adminmart. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
+            </footer>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="~/Assets/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="~/Assets/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="~/Assets/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Assets/dist/js/app-style-switcher.js"></script>
+    <script src="~/Assets/dist/js/feather.min.js"></script>
+    <script src="~/Assets/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Assets/assets/extra-libs/sparkline/sparkline.js"></script>
+    <script src="~/Assets/dist/js/sidebarmenu.js"></script>
+    <script src="~/Assets/dist/js/custom.min.js"></script>
+    <script src="~/Assets/assets/extra-libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Assets/dist/js/pages/datatable/datatable-basic.init.js"></script>
+
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

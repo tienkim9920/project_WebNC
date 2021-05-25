@@ -1,0 +1,39 @@
+﻿@model admin_app.Models.Permission
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Create Permission</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @if (ViewBag.Error != null)
+                        {
+                            <p class="text-danger">@ViewBag.Error</p>
+                        }
+
+                        <div class="form-group w-50">
+                            @Html.LabelFor(model => model.permission1, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.permission1, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.permission1, "", new { @class = "text-danger" })
+                        </div>
+                        <input type="submit" class="btn btn-primary" value="Create">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+}
+
+

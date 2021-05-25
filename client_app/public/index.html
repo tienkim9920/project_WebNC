@@ -29,7 +29,7 @@
     data-csp-nonce="xyz-123"></script>
 
   <script defer
-    src="https://maps.googleapis.com/maps/api/js?libraries=places&language=en&key=AIzaSyA66KwUrjxcFG5u0exynlJ45CrbrNe3hEc"
+    src="https://maps.googleapis.com/maps/api/js?libraries=places&language=en&key=AIzaSyAcQjrfAudzl6Ton7GA7D-gVqOINMFE7ns"
     type="text/javascript"></script>
 
   <title>React App</title>
@@ -163,11 +163,11 @@
         $("#result").removeClass("hide");
         $('#in_kilo').html(distance_in_kilo.toFixed(2) + ' Km');
         $('#duration_text').html(duration_text);
-        if (parseInt(distance_in_kilo) < 5){
+        if (parseInt(distance_in_kilo) < 5) {
           $('#price_shipping').html('5');
-        }else if (parseInt(distance_in_kilo) > 5 && parseInt(distance_in_kilo) < 10){
+        } else if (parseInt(distance_in_kilo) > 5 && parseInt(distance_in_kilo) < 10) {
           $('#price_shipping').html('10');
-        }else{
+        } else {
           $('#price_shipping').html('15');
         }
       }

@@ -1,0 +1,93 @@
+﻿@model IEnumerable<admin_app.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Cancel Order</h4>
+                    <h5 class="card-title">Total money: <span style="font-weight: normal">$@ViewBag.totalMoney VNĐ</span></h5>
+                    <div class="table-responsive">
+                        <table id="zero_config" class="table table-striped table-bordered no-wrap">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
+                                    <th>Total Money</th>
+                                    <th>Payment</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.id_history)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Note.fullname)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.User.email)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Note.phone)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.address)
+                                            @{
+                                                switch (item.status)
+                                                {
+                                                    case "1":
+                                                    <td>Đang xử lý</td>
+                                                    break;
+
+                                                case "2":
+                                                    <td>Đã xác nhận</td>
+                                                    break;
+
+                                                case "3":
+                                                    <td>Đang giao</td>
+                                                    break;
+
+                                                case "4":
+                                                    <td>Hoàn thành</td>
+                                                    break;
+
+                                                default:
+                                                    <td>Đơn bị hủy</td>
+                                                    break;
+                                            }
+                                            }
+
+                                            <td>
+
+                                                @Html.DisplayFor(modelItem => item.total) VNĐ
+                                            </td>
+                                            <td>
+                                                @(item.pay==true?"Đã thanh toán":"Chưa thanh toán")
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Detail", "Detail", new { id = item.id_history }, new { @class = "btn btn-primary mr-1" })
+                                            </td>
+                                        </tr>
+                                    }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

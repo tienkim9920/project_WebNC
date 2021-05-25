@@ -32,7 +32,7 @@ function Home(props) {
 
     useEffect(() => {
 
-        if (id_modal !== ''){
+        if (id_modal !== '') {
 
             const fetchData = async () => {
 
@@ -48,7 +48,7 @@ function Home(props) {
 
     }, [id_modal])
 
-    
+
     // Get count từ redux khi user chưa đăng nhập
     const count_change = useSelector(state => state.Count.isLoad)
 
@@ -93,7 +93,7 @@ function Home(props) {
                                     <div className="slider-progress"></div>
 
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -199,7 +199,7 @@ function Home(props) {
                         </div>
                     </div>
                 </div>
-            </div>   
+            </div>
 
         </div>
     );

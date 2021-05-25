@@ -89,6 +89,12 @@ const SignUp = lazy(() => {
   });
 });
 
+const Forget = lazy(() => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(import("./Auth/Forget")), 2000);
+  });
+});
+
 const History = lazy(() => {
   return new Promise((resolve) => {
     setTimeout(() => resolve(import("./History/History")), 2000);
@@ -138,10 +144,11 @@ function App() {
             <Route path="/contact" component={Contact} />
             <Route path="/signin" component={SignIn} />
             <Route path="/signup" component={SignUp} />
+            <Route path="/forget" component={Forget} />
             <Route path="/success" component={OrderSuccess} />
             <Route path="/fail" component={OrderFail} />
             <Route path="/history" component={History} />
-            <Route path="/profile/:id" component={Profile} />
+            <Route path="/profile" component={Profile} />
             <Route path="/search" component={Search} />
           </Switch>
         </Suspense>
