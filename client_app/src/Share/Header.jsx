@@ -18,7 +18,7 @@ function Header(props) {
     const [count_cart, set_count_cart] = useState(0)
 
     const [total_price, set_total_price] = useState(0)
-    
+
     const [carts_mini, set_carts_mini] = useState([])
 
     // Hàm này để khởi tạo localStorage dùng để lưu trữ giỏ hàng
@@ -38,9 +38,9 @@ function Header(props) {
 
     window.addEventListener('scroll', () => {
 
-        if (window.pageYOffset < 200){
+        if (window.pageYOffset < 200) {
             set_header_navbar('header-bottom header-sticky')
-        }else{
+        } else {
             set_header_navbar('header-bottom header-sticky offset_navigation animate__animated animate__fadeInUp')
         }
 
@@ -50,7 +50,7 @@ function Header(props) {
 
     //Sau khi F5 nó sẽ kiểm tra nếu phiên làm việc của Session vẫn còn thì nó sẽ tiếp tục
     // đưa dữ liệu vào Redux
-    if (sessionStorage.getItem('id_user')){
+    if (sessionStorage.getItem('id_user')) {
         const action = addSession(sessionStorage.getItem('id_user'))
         dispatch(action)
     }
@@ -68,11 +68,11 @@ function Header(props) {
     // Hàm này dùng để hiện thị
     useEffect(() => {
 
-        if (id_user === ''){ // user chưa đăng nhâp
+        if (id_user === '') { // user chưa đăng nhâp
 
             set_active_user(false)
 
-        }else{ // user đã đăng nhâp
+        } else { // user đã đăng nhâp
 
             const fetchData = async () => {
 
@@ -89,7 +89,7 @@ function Header(props) {
 
     }, [id_user])
 
-    
+
     // Hàm này dùng để xử lý phần log out
     const handler_logout = () => {
 
@@ -108,7 +108,7 @@ function Header(props) {
     // Phụ thuộc vào thằng redux count
     useEffect(() => {
 
-        if (count){
+        if (count) {
 
             showData(JSON.parse(localStorage.getItem('carts')), 0, 0)
 
@@ -120,7 +120,7 @@ function Header(props) {
     }, [count])
 
     // Hàm này là hàm con chia ra để xử lý
-    function showData(carts, sum, price){
+    function showData(carts, sum, price) {
 
         carts.map(value => {
             sum += value.count
@@ -135,7 +135,7 @@ function Header(props) {
 
     }
 
-    
+
     // Hàm này dùng để xóa carts_mini
     const handler_delete_mini = (id_cart) => {
 
@@ -147,7 +147,7 @@ function Header(props) {
     }
 
     const [category, set_category] = useState([])
-    
+
     useEffect(() => {
 
         const fetchData = async () => {
@@ -224,23 +224,23 @@ function Header(props) {
                                     <div className="ht-setting-trigger">
                                         {
                                             active_user ? (
-                                            <span
-                                                data-toggle="collapse"
-                                                data-target="#collapseExample"
-                                                aria-expanded="false"
-                                                aria-controls="collapseExample">{user.fullname}</span>) : (
-                                            <span
-                                                data-toggle="collapse"
-                                                data-target="#collapseExample"
-                                                aria-expanded="false"
-                                                aria-controls="collapseExample">Setting</span>
+                                                <span
+                                                    data-toggle="collapse"
+                                                    data-target="#collapseExample"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseExample">{user.fullname}</span>) : (
+                                                <span
+                                                    data-toggle="collapse"
+                                                    data-target="#collapseExample"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseExample">Setting</span>
                                             )
                                         }
                                     </div>
                                     <div className="ul_setting">
-                                        { active_user ? (
+                                        {active_user ? (
                                             <ul className="setting_ul collapse" id="collapseExample">
-                                                <li className="li_setting"><Link to="/profile/123">Profile</Link></li>
+                                                <li className="li_setting"><Link to="/profile">Profile</Link></li>
                                                 <li className="li_setting"><Link to="/history">Order Status</Link></li>
                                                 <li className="li_setting"><a onClick={handler_logout} href="#">Log Out</a></li>
                                             </ul>
@@ -249,7 +249,7 @@ function Header(props) {
                                                 <li className="li_setting"><Link to="/signin">Sign In</Link></li>
                                             </ul>
                                         )}
-                                        
+
                                     </div>
                                 </li>
                             </ul>
@@ -263,30 +263,38 @@ function Header(props) {
                         <div className="col-lg-3">
                             <div className="logo pb-sm-30 pb-xs-30">
                                 <Link to="/">
-                                    <img src={logo} style={{ width: '13rem'}} />
+                                    <img src={logo} style={{ width: '13rem' }} />
                                 </Link>
                             </div>
                         </div>
                         <div className="col-lg-9 pl-0 ml-sm-15 ml-xs-15 d-flex justify-content-between">
                             <form action="/search" className="hm-searchbox" onSubmit={handler_search}>
-                                <input type="text" placeholder="Enter your search key ..." onChange={(e) => set_keyword_search(e.target.value)}/>
+                                <input type="text" placeholder="Enter your search key ..." onChange={(e) => set_keyword_search(e.target.value)} />
                                 <button className="li-btn" type="submit"><i className="fa fa-search"></i></button>
                                 {
                                     keyword_search && <div className="show_search_product">
-                                    {
-                                        search_header && search_header.map(value => (
-                                            <Link to={`/detail/${value.id_product}`} className="hover_box_search d-flex" key={value.id_product}>
-                                                <div style={{ padding: '.8rem'}}>
-                                                    <img className="img_list_search" src={value.image} alt="" />
-                                                </div>
+                                        {
+                                            search_header && search_header.map(value => (
+                                                <Link to={`/detail/${value.id_product}`} className="hover_box_search d-flex" key={value.id_product}>
+                                                    <div style={{ padding: '.8rem' }}>
+                                                        {
+                                                            value.image.substring(0, 5) === 'https' ?
+                                                                (
+                                                                    <img className="img_list_search" src={value.image} alt="Li's Product Image" />
+                                                                ) :
+                                                                (
+                                                                    <img className="img_list_search" src={"data:image/png;base64," + value.image} alt="Li's Product Image" />
+                                                                )
+                                                        }
+                                                    </div>
 
-                                                <div className="group_title_search" style={{ marginTop: '2.7rem'}}>
-                                                    <h6 className="title_product_search">{value.name_product}</h6>
-                                                    <span className="price_product_search">{value.price_product}$</span>
-                                                </div>
-                                            </Link>
-                                        ))
-                                    }
+                                                    <div className="group_title_search" style={{ marginTop: '2.7rem' }}>
+                                                        <h6 className="title_product_search">{value.name_product}</h6>
+                                                        <span className="price_product_search">{value.price_product}$</span>
+                                                    </div>
+                                                </Link>
+                                            ))
+                                        }
                                     </div>
                                 }
                             </form>
@@ -305,7 +313,7 @@ function Header(props) {
                                                 aria-controls="collapse_carts">
                                                 <span className="item-icon"></span>
                                                 <span className="item-text">${total_price}
-                                                <span className="cart-item-count">{count_cart}</span>
+                                                    <span className="cart-item-count">{count_cart}</span>
                                                 </span>
                                             </div>
                                             <span></span>

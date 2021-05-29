@@ -56,10 +56,10 @@ namespace API.Controllers
 
 
         // POST: api/History/sendmail dung de gui email
-        [HttpPost]
-        [Route("sendmail")]
-        public ActionResult Post_SendMail()
-        {
+        //[HttpPost]
+        //[Route("sendmail")]
+        //public ActionResult Post_SendMail()
+       // {
             //var id_find = HttpContext.Request.Query["id_find"];
 
             //var history = _context.History.SingleOrDefault(value => value.id_find.Equals(id_find));
@@ -67,8 +67,8 @@ namespace API.Controllers
             //var message = new MimeMessage();
 
             //message.From.Add(new MailboxAddress("Admin", "tienkim9920@gmail.com"));
-            //message.To.Add(new MailboxAddress("Customer", history.email));
-            //message.Subject = "Hóa Đơn Đặt Hàng";
+            //message.To.Add(new MailboxAddress("Customer","minhhieu0112000@gmail.com"));
+            //message.Subject = "Mã OTP";
 
             //var carts = _context.Carts.Where(value => value.id_user.Equals(history.id_user));
 
@@ -99,22 +99,22 @@ namespace API.Controllers
             //htmlHead + htmlContent + "<h1>Phí Vận Chuyển: " + delivery.price + "$</h1></br>" + "<h1>Tổng Thanh Toán: " + history.total + "$</h1></br><p>Cảm ơn bạn!</p>";
 
             //BodyBuilder bodyBuilder = new BodyBuilder();
-            //bodyBuilder.HtmlBody = htmlResult;
+            //bodyBuilder.HtmlBody = "1515";
 
             //message.Body = bodyBuilder.ToMessageBody();
 
             //using (var client = new SmtpClient())
             //{
             //    client.Connect("smtp.gmail.com", 587, false);
-            //    client.Authenticate("tienkim9920@gmail.com", "Tktk0909@");
+            //    client.Authenticate("ninhhieu112000@gmail.com", "hieusuper20hcm");
 
             //    client.Send(message);
             //    client.Disconnect(true);
             //}
 
 
-            return Ok("Thanh Cong!");
-        }
+            //return Ok("Thanh Cong!");
+        //}
 
     }
 }

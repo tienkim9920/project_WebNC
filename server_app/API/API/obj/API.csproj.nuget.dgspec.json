@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\project_WebNC\\server_app\\API\\API\\API.csproj": {}
+    "E:\\ReactJS\\project_WebNC\\server_app\\API\\API\\API.csproj": {}
   },
   "projects": {
-    "D:\\project_WebNC\\server_app\\API\\API\\API.csproj": {
+    "E:\\ReactJS\\project_WebNC\\server_app\\API\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\project_WebNC\\server_app\\API\\API\\API.csproj",
+        "projectUniqueName": "E:\\ReactJS\\project_WebNC\\server_app\\API\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "D:\\project_WebNC\\server_app\\API\\API\\API.csproj",
-        "packagesPath": "C:\\Users\\hi\\.nuget\\packages\\",
-        "outputPath": "D:\\project_WebNC\\server_app\\API\\API\\obj\\",
+        "projectPath": "E:\\ReactJS\\project_WebNC\\server_app\\API\\API\\API.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "E:\\ReactJS\\project_WebNC\\server_app\\API\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\hi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -91,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.408\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

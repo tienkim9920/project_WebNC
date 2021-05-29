@@ -83,7 +83,15 @@ function Search(props) {
                                                     <div className="col-lg-3 col-md-5 ">
                                                         <div className="product-image">
                                                             <Link to={`/detail/${value.id_product}`}>
-                                                                <img src={value.image} alt="Li's Product Image" />
+                                                                {
+                                                                    value.image.substring(0, 5) === 'https' ?
+                                                                        (
+                                                                            <img src={value.image} alt="Li's Product Image" />
+                                                                        ) :
+                                                                        (
+                                                                            <img src={"data:image/png;base64," + value.image} alt="Li's Product Image" />
+                                                                        )
+                                                                }
                                                             </Link>
                                                             <span className="sticker">New</span>
                                                         </div>

@@ -153,7 +153,7 @@ function Shop(props) {
 
     useEffect(() => {
 
-        if (id_modal !== ''){
+        if (id_modal !== '') {
 
             const fetchData = async () => {
 

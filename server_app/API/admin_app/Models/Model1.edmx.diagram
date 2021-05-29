@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="959ad214545644d59d394e2b19c429ef" Name="Diagram1">
+        <EntityTypeShape EntityType="ShoppingModel.Category" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingModel.Comment" Width="1.5" PointX="5.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingModel.Detail_Order" Width="1.5" PointX="10.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingModel.Note" Width="1.5" PointX="6" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingModel.Order" Width="1.5" PointX="8.25" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingModel.Payment" Width="1.5" PointX="6" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingModel.Permission" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingModel.Product" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingModel.sysdiagram" Width="1.5" PointX="0.75" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingModel.User" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
+        <AssociationConnector Association="ShoppingModel.FK_Product_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingModel.FK_Comment_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingModel.FK_Comment_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingModel.FK_Detail_Order_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingModel.FK_Detail_Order_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingModel.FK_Order_Note" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingModel.FK_Order_Payment" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingModel.FK_Order_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingModel.FK_User_Permission" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

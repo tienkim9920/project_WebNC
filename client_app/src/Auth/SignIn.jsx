@@ -9,7 +9,7 @@ import Cart from '../API/CartAPI';
 import { changeCount } from '../Redux/Action/ActionCount';
 
 SignIn.propTypes = {
-    
+
 };
 
 function SignIn(props) {
@@ -45,22 +45,22 @@ function SignIn(props) {
 
             const response = await User.Get_Detail_User(query)
 
-            if (response === "Khong Tìm Thấy User"){
+            if (response === "Khong Tìm Thấy User") {
                 set_error_username(true)
-            }else{
-                if (response === "Sai Mat Khau"){
+            } else {
+                if (response === "Sai Mat Khau") {
                     set_error_username(false)
                     set_error_password(true)
-                }else{
+                } else {
 
-                   console.log(response)
+                    console.log(response)
 
                     const action = addSession(response.id_user)
                     dispatch(action)
 
                     sessionStorage.setItem('id_user', response.id_user)
 
-                    for (let i = 0; i < carts.length; i++){
+                    for (let i = 0; i < carts.length; i++) {
 
                         carts[i].id_user = sessionStorage.getItem('id_user')
 
@@ -69,7 +69,7 @@ function SignIn(props) {
                         console.log(response)
 
                     }
-                    
+
                     const action_count_change = changeCount(count_change)
                     dispatch(action_count_change)
 
@@ -124,13 +124,13 @@ function SignIn(props) {
                                             </div>
                                         </div>
                                         <div className="col-md-4 mt-10 mb-20 text-left text-md-right">
-                                            <a href="#"> Forgotten pasward?</a>
+                                            <Link to="/forget"> Forgotten pasward?</Link>
                                         </div>
                                         <div className="col-md-12">
                                             {
                                                 redirect && <Redirect to="/" />
                                             }
-                                            <button className="register-button mt-0" style={{ cursor: 'pointer'}} onClick={handler_signin}>Login</button>
+                                            <button className="register-button mt-0" style={{ cursor: 'pointer' }} onClick={handler_signin}>Login</button>
                                         </div>
                                     </div>
                                 </div>

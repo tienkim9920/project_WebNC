@@ -108,7 +108,15 @@ function Home_Category(props) {
                                 <div className="single-product-wrap">
                                     <div className="product-image">
                                         <Link to={`/detail/${value.id_product}`}>
-                                            <img src={value.image} alt="Li's Product Image" />
+                                            {
+                                                value.image.substring(0, 5) === 'https' ?
+                                                    (
+                                                        <img src={value.image} alt="Li's Product Image" />
+                                                    ) :
+                                                    (
+                                                        <img src={"data:image/png;base64," + value.image} alt="Li's Product Image" />
+                                                    )
+                                            }
                                         </Link>
                                         <span className="sticker">New</span>
                                     </div>

@@ -68,8 +68,8 @@ function Paypal(props) {
 
                 Change_Load_Order(true)
 
-                const id_history = Math.random().toString()
-                const id_note = Math.random().toString()
+                const id_history = Math.random().toString().replace(".", "")
+                const id_note = Math.random().toString().replace(".", "")
 
                 const body_order = {
                     //Order
@@ -106,7 +106,7 @@ function Paypal(props) {
                 for (let i = 0; i < data_carts.length; i++) {
 
                     const data = {
-                        id_detail_history: "CT" + Math.random().toString(),
+                        id_detail_history: "CT" + Math.random().toString().replace(".", ""),
                         id_history: id_history,
                         name_product: data_carts[i].name_product,
                         price_product: data_carts[i].price_product,

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<admin_app.Models.Detail_Order>
+@using admin_app.Models;
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Detail Order</h4>
+                    <div className="mt-3 ml-1">
+                        <h5>Address: @ViewBag.Order.address</h5>
+                        <h5>FeeShip: $@ViewBag.Order.feeship</h5>
+                        <h5>Total: @ViewBag.Order.total</h5>
+                        <h5>Payment: @ViewBag.Order.Payment.pay_category</h5>
+
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="zero_config" class="table table-striped table-bordered no-wrap">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Count</th>
+                                    <th>Total Money</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src=@(item.image) alt="" style="width: 70px;">
+                                        </td>
+                                        <td>
+                                            <p class="name-product">@Html.DisplayFor(modelItem => item.name_product)</p>
+                                        </td>
+                                        <td>
+                                            $@Html.DisplayFor(modelItem => item.price_product)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.count)
+                                        </td>
+                                        <td>
+                                            $@(item.count * int.Parse(item.price_product))
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

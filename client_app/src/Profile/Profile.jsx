@@ -3,20 +3,23 @@ import PropTypes from 'prop-types';
 import './Profile.css'
 import avt from './avt.jpg'
 import User from '../API/User';
+import queryString from 'query-string'
+import isEmpty from 'validator/lib/isEmpty'
 
 Profile.propTypes = {
 
 };
 
 function Profile(props) {
-
-    
+    const [validationMsg, setValidationMsg] = useState('');
     const [name, set_name] = useState('')
     const [username, set_username] = useState('')
     const [email, set_email] = useState('')
     const [password, set_password] = useState('')
     const [new_password, set_new_password] = useState('')
     const [compare_password, set_compare_password] = useState('')
+    const [message, setMessage] = useState('')
+    const [message1, setMessage1] = useState('')
 
     // Hàm này dùng để render html cho từng loại edit profile hoặc change password
     // Tùy theo người dùng chọn
@@ -44,10 +47,6 @@ function Profile(props) {
 
             set_email(response.email)
 
-            set_password(response.password)
-            set_new_password(response.password)
-            set_compare_password(response.password)
-
         }
 
         fetchData()
@@ -55,8 +54,57 @@ function Profile(props) {
     }, [])
 
 
+
+    const validateAll = () => {
+        let msg = {}
+        if (isEmpty(name)) {
+            msg.name = "Name không được để trống"
+        }
+        setValidationMsg(msg)
+        if (Object.keys(msg).length > 0) return false;
+        return true;
+    }
+
+    const handleSubmit = async () => {
+        const isValid = validateAll();
+        if (!isValid) return
+        const query = '?' + queryString.stringify({ fullname: name, id_user: sessionStorage.getItem('id_user') })
+
+        const response = await User.Change_Profile(query)
+
+        setMessage(response)
+    }
+
+    const validateAllPassword = () => {
+        let msg = {}
+        if (isEmpty(password)) {
+            msg.password = "Old password không được để trống"
+        }
+        if (isEmpty(new_password)) {
+            msg.new_password = "New password không được để trống"
+        }
+        if (compare_password !== new_password) {
+            msg.compare_password = "Xác nhận password không đúng"
+        }
+        setValidationMsg(msg)
+        if (Object.keys(msg).length > 0) return false;
+        return true;
+    }
+
+
+    const changePassword = async () => {
+        const isValid = validateAllPassword();
+        if (!isValid) return
+        const query = '?' + queryString.stringify({ password: password, newPassword: new_password, id_user: sessionStorage.getItem('id_user') })
+
+        const response = await User.Change_Password(query)
+
+        setMessage1(response)
+    }
+
+
     return (
-        <div className="container mt-5 pt-4" style={{ paddingBottom: '4rem'}}>
+        <div className="container mt-5 pt-4" style={{ paddingBottom: '4rem' }}>
             <div className="group_profile">
                 <div className="group_setting mt-3">
                     <div className="setting_left">
@@ -80,49 +128,24 @@ function Profile(props) {
                         {
                             edit_status === 'edit_profile' ? (
                                 <div className="setting_edit_profile">
-                                    <div className="header_setting_edit d-flex justify-content-center pt-4 pb-4">
-                                        <div className="d-flex">
-                                            <img src={avt} alt="" className="image_header_setting_edit" />
-                                            <div className="ml-4">
-                                                <span style={{ fontWeight: '600', fontSize: '1.2rem' }}>Nguyen Kim Tien</span>
-                                                <br />
-                                                <a href="#" data-toggle="modal" data-target="#exampleModal">
-                                                    Change Profile Photo</a>
-
-                                                <div className="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div className="modal-dialog" role="document">
-                                                        <div className="modal-content">
-                                                            <div className="modal-header">
-                                                                <h5 className="modal-title" id="exampleModalLabel">Change Profile Photo</h5>
-                                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div className="modal-footer">
-                                                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <p className="text-success text-center">{message ? message : ""}</p>
                                     <div className="txt_setting_edit pt-3 pb-2">
                                         <div className="d-flex justify-content-center align-items-center">
                                             <span style={{ fontWeight: '600' }}>Name</span>
                                         </div>
                                         <div>
                                             <input className="txt_input_edit" type="text" value={name}
-                                                onChange={(e) => set_name(e.target.value)} />
+                                                onChange={(e) => set_name(e.target.value)} required />
+                                            <p className="text-danger">{validationMsg.name}</p>
                                         </div>
+
                                     </div>
                                     <div className="txt_setting_edit pt-3 pb-2">
                                         <div className="d-flex justify-content-center align-items-center">
                                             <span style={{ fontWeight: '600' }}>Username</span>
                                         </div>
                                         <div>
-                                            <input className="txt_input_edit" type="text" value={username}
-                                                onChange={(e) => set_username(e.target.value)} />
+                                            <input className="txt_input_edit" type="text" value={username} disabled={true} />
                                         </div>
                                     </div>
                                     <div className="txt_setting_edit pt-3 pb-2">
@@ -130,24 +153,25 @@ function Profile(props) {
                                             <span style={{ fontWeight: '600' }}>Email</span>
                                         </div>
                                         <div>
-                                            <input className="txt_input_edit" type="text" disabled={true} value={email}
-                                                onChange={(e) => set_email(e.target.value)} />
+                                            <input className="txt_input_edit" type="text" disabled={true} value={email} />
                                         </div>
                                     </div>
                                     <div className="d-flex justify-content-center pt-3 pb-4">
-                                        <button className="btn btn-secondary">Submit</button>
+                                        <button onClick={handleSubmit} className="btn btn-secondary">Submit</button>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="setting_change_password">
-                                    <div className="header_setting_edit d-flex justify-content-center pt-4 pb-4">
-                                        <div className="d-flex">
-                                            <img src={avt} alt="" className="image_header_setting_edit" />
-                                            <div className="ml-4 mt-2">
-                                                <span style={{ fontWeight: '600', fontSize: '1.2rem' }}>nkt.9920</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {
+                                        message1 === "Update thành công!" ?
+                                            (
+                                                <p className="text-success text-center">{message1}</p>
+                                            ) :
+                                            (
+                                                <p className="text-danger text-center">{message1}</p>
+                                            )
+                                    }
+
                                     <div className="txt_setting_edit pt-3 pb-2">
                                         <div className="d-flex justify-content-center align-items-center">
                                             <span style={{ fontWeight: '600' }}>Old Password</span>
@@ -155,6 +179,7 @@ function Profile(props) {
                                         <div>
                                             <input className="txt_input_edit" type="password" value={password}
                                                 onChange={(e) => set_password(e.target.value)} />
+                                            <p className="text-danger">{validationMsg.password}</p>
                                         </div>
                                     </div>
                                     <div className="txt_setting_edit pt-3 pb-2">
@@ -164,6 +189,7 @@ function Profile(props) {
                                         <div>
                                             <input className="txt_input_edit" type="password" value={new_password}
                                                 onChange={(e) => set_new_password(e.target.value)} />
+                                            <p className="text-danger">{validationMsg.new_password}</p>
                                         </div>
                                     </div>
                                     <div className="txt_setting_edit pt-3 pb-2">
@@ -173,10 +199,11 @@ function Profile(props) {
                                         <div>
                                             <input className="txt_input_edit" type="password" value={compare_password}
                                                 onChange={(e) => set_compare_password(e.target.value)} />
+                                            <p className="text-danger">{validationMsg.compare_password}</p>
                                         </div>
                                     </div>
                                     <div className="d-flex justify-content-center pt-3 pb-4 align-items-center">
-                                        <button className="btn btn-secondary">Change Password</button>
+                                        <button onClick={changePassword} className="btn btn-secondary">Change Password</button>
                                     </div>
                                 </div>
                             )

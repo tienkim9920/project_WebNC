@@ -1,0 +1,12 @@
+﻿@model List<admin_app.Models.Menu>
+
+@foreach (var item in Model)
+{
+    <li class="sidebar-item">
+        <a href="@("/"+item.Item.Trim().ToLower())" class="sidebar-link">
+            <span class="hide-menu">
+                @item.Item
+            </span>
+        </a>
+    </li>
+}

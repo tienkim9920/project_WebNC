@@ -1,0 +1,15 @@
+﻿.sidebar-item a .active {
+    color: black !important;
+    font-weight: bolder !important;
+    opacity: 1 !important;
+}
+
+.page-wrapper {
+    display: block;
+}
+.name-product {
+    width: 200px!important;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

@@ -9,7 +9,7 @@ SignUp.propTypes = {
 };
 
 const defaultValues = {
-    name:'',
+    name: '',
     email: '',
     username: '',
     password: '',
@@ -28,8 +28,7 @@ function SignUp(props) {
 
     const onSubmit = (data) => {
 
-        if (data.password !== data.confirmPassword)
-        {
+        if (data.password !== data.confirmPassword) {
             setCheckPass(true)
             return
         }
@@ -39,11 +38,11 @@ function SignUp(props) {
         const fetchData = async () => {
 
             const body = {
-                id_user: Math.random().toString(),
+                id_user: Math.random().toString().replace(".", ""),
                 username: data.username.toString(),
                 password: data.confirmPassword.toString(),
                 fullname: data.name.toString(),
-                id_permission: '0.4859514654',
+                id_permission: '04859514654',
                 email: data.email.toString()
             }
 
@@ -51,11 +50,14 @@ function SignUp(props) {
 
             const response = await User.Post_User(body)
 
-            console.log(response)
+            if (response === "Username hoặc Email đã tồn tại") {
+                set_username_exist(true)
+            } else {
+                set_username_exist(false)
+                set_show_success(true)
+                reset(defaultValues)
+            }
 
-            set_show_success(true)
-
-            reset(defaultValues)
 
         }
 
@@ -101,12 +103,15 @@ function SignUp(props) {
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <div className="login-form">
                                     <h4 className="login-title">Register</h4>
+                                    {
+                                        username_exist && <span style={{ color: 'red' }}>Username hoặc Email đã tồn tại</span>
+                                    }
                                     <div className="row">
                                         <div className="col-md-12 mb-20">
                                             <label>Full Name *</label>
-                                            <input className="mb-0" type="text" placeholder="First Name" 
-                                            name="name"
-                                            ref={register({ required: true })}
+                                            <input className="mb-0" type="text" placeholder="First Name"
+                                                name="name"
+                                                ref={register({ required: true })}
                                             />
                                             {
                                                 errors.name && errors.name.type === "required" && <span style={{ color: 'red' }}>* Fullname is required</span>
@@ -114,8 +119,8 @@ function SignUp(props) {
                                         </div>
                                         <div className="col-md-12 mb-20">
                                             <label>Email *</label>
-                                            <input className="mb-0" type="text" placeholder="Email" 
-                                            name="email" ref={register({ required: true })} />
+                                            <input className="mb-0" type="text" placeholder="Email"
+                                                name="email" ref={register({ required: true })} />
                                             {
                                                 errors.email && errors.email.type === "required" && <span style={{ color: 'red' }}>* Email is required</span>
                                             }
@@ -125,9 +130,6 @@ function SignUp(props) {
                                             <input className="mb-0" type="text" placeholder="Username" name="username" ref={register({ required: true })} />
                                             {
                                                 errors.username && errors.username.type === "required" && <span style={{ color: 'red' }}>* Username is required</span>
-                                            }
-                                            {
-                                                username_exist && <span style={{ color: 'red' }}>* Username is Existed!</span>
                                             }
                                         </div>
                                         <div className="col-md-6 mb-20">
